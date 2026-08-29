@@ -46,6 +46,13 @@ from .groups import InviteCommand, ExpelCommand, JoinCommand, QuitCommand, Reset
 from .assets import MoneyContent, TransferContent
 # from .assets import BaseMoneyContent, TransferMoneyContent
 
+from .contents import TextContent
+from .contents import PageContent, NameCard
+# from .contents import BaseTextContent, WebPageContent, NameCardContent
+
+from .combine import CombineContent
+# from .combine import CombineForwardContent
+
 
 __all__ = [
 
@@ -55,6 +62,9 @@ __all__ = [
 
     'FileContent', 'ImageContent', 'AudioContent', 'VideoContent',
     'MoneyContent', 'TransferContent',
+
+    'TextContent', 'PageContent', 'NameCard',
+    'CombineContent',
 
     #
     #  Command Extends
@@ -76,5 +86,9 @@ __all__ = [
 
     # 'BaseHistoryCommand', 'BaseGroupCommand',
     # 'InviteGroupCommand', 'ExpelGroupCommand', 'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
+
+    # 'BaseTextContent', 'WebPageContent', 'NameCardContent',
+
+    # 'CombineForwardContent',
 
 ]

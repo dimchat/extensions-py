@@ -58,6 +58,9 @@ __all__ = [
     'FileContent', 'ImageContent', 'AudioContent', 'VideoContent',
     'MoneyContent', 'TransferContent',
 
+    'TextContent', 'PageContent', 'NameCard',
+    'CombineContent',
+
     #
     #  Command Extends
     #
@@ -101,6 +104,9 @@ __all__ = [
     'BaseFileContent', 'ImageFileContent', 'AudioFileContent', 'VideoFileContent',
 
     'BaseMoneyContent', 'TransferMoneyContent',
+
+    'BaseTextContent', 'WebPageContent', 'NameCardContent',
+    'CombineForwardContent',
 
     #
     #   Command Implementations

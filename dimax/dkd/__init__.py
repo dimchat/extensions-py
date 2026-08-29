@@ -36,6 +36,9 @@ from ..protocol.groups import InviteGroupCommand, ExpelGroupCommand
 from ..protocol.groups import JoinGroupCommand, QuitGroupCommand, ResetGroupCommand
 from ..protocol.assets import BaseMoneyContent, TransferMoneyContent
 
+from ..protocol.contents import BaseTextContent, WebPageContent, NameCardContent
+from ..protocol.combine import CombineForwardContent
+
 from .cmd_fact import GeneralCommandFactory
 from .cmd_fact import HistoryCommandFactory
 from .cmd_fact import GroupCommandFactory
@@ -62,6 +65,9 @@ __all__ = [
 
     'BaseHistoryCommand', 'BaseGroupCommand',
     'InviteGroupCommand', 'ExpelGroupCommand', 'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
+
+    'BaseTextContent', 'WebPageContent', 'NameCardContent',
+    'CombineForwardContent',
 
     #
     #   Command Factories
