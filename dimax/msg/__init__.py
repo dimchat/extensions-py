@@ -28,47 +28,15 @@
 # SOFTWARE.
 # ==============================================================================
 
-from ..protocol import *
-
-from ..protocol.files import BaseFileContent, ImageFileContent, AudioFileContent, VideoFileContent
-from ..protocol.groups import BaseHistoryCommand, BaseGroupCommand
-from ..protocol.groups import InviteGroupCommand, ExpelGroupCommand
-from ..protocol.groups import JoinGroupCommand, QuitGroupCommand, ResetGroupCommand
-from ..protocol.assets import BaseMoneyContent, TransferMoneyContent
-
-from .cmd_fact import GeneralCommandFactory
-from .cmd_fact import HistoryCommandFactory
-from .cmd_fact import GroupCommandFactory
+from .factory import MessageFactory
 
 
 __all__ = [
 
     #
-    #   Protocol
+    #   Message Factory
     #
 
-    'MoneyContent', 'TransferContent',
-    'FileContent', 'ImageContent', 'AudioContent', 'VideoContent',
-
-    'HistoryCommand', 'GroupCommand',
-    'InviteCommand', 'ExpelCommand', 'JoinCommand', 'QuitCommand', 'ResetCommand',
-
-    #
-    #   Implementations
-    #
-
-    'BaseMoneyContent', 'TransferMoneyContent',
-    'BaseFileContent', 'ImageFileContent', 'AudioFileContent', 'VideoFileContent',
-
-    'BaseHistoryCommand', 'BaseGroupCommand',
-    'InviteGroupCommand', 'ExpelGroupCommand', 'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
-
-    #
-    #   Command Factories
-    #
-
-    'GeneralCommandFactory',
-    'HistoryCommandFactory',
-    'GroupCommandFactory',
+    'MessageFactory',
 
 ]

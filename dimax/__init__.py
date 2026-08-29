@@ -40,6 +40,8 @@ from .protocol import *
 from .mem import *
 from .mkm import *
 from .dkd import *
+from .msg import *
+from .ext import *
 
 
 name = "DIM-AX"
@@ -106,5 +108,22 @@ __all__ = [
 
     'BaseHistoryCommand', 'BaseGroupCommand',
     'InviteGroupCommand', 'ExpelGroupCommand', 'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
+
+    #
+    #   Message Factories
+    #
+
+    'GeneralCommandFactory',
+    'HistoryCommandFactory',
+    'GroupCommandFactory',
+
+    'MessageFactory',
+
+    #
+    #   Core Extensions
+    #
+
+    'AccountGeneralFactory', 'FormatGeneralFactory',
+    'MessageGeneralFactory', 'CommandGeneralFactory',
 
 ]
