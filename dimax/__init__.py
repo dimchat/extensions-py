@@ -65,11 +65,13 @@ __all__ = [
 
     'TextContent', 'PageContent', 'NameCard',
     'CombineContent',
+    'QuoteContent',
 
     #
     #  Command Extends
     #
 
+    'ReceiptCommand',
     'HistoryCommand', 'GroupCommand',
     'InviteCommand', 'ExpelCommand', 'JoinCommand', 'QuitCommand', 'ResetCommand',
 
@@ -112,11 +114,13 @@ __all__ = [
 
     'BaseTextContent', 'WebPageContent', 'NameCardContent',
     'CombineForwardContent',
+    'BaseQuoteContent',
 
     #
     #   Command Implementations
     #
 
+    'BaseReceiptCommand',
     'BaseHistoryCommand', 'BaseGroupCommand',
     'InviteGroupCommand', 'ExpelGroupCommand', 'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
 

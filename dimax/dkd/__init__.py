@@ -31,13 +31,16 @@
 from ..protocol import *
 
 from ..protocol.files import BaseFileContent, ImageFileContent, AudioFileContent, VideoFileContent
-from ..protocol.groups import BaseHistoryCommand, BaseGroupCommand
-from ..protocol.groups import InviteGroupCommand, ExpelGroupCommand
-from ..protocol.groups import JoinGroupCommand, QuitGroupCommand, ResetGroupCommand
 from ..protocol.assets import BaseMoneyContent, TransferMoneyContent
 
 from ..protocol.contents import BaseTextContent, WebPageContent, NameCardContent
 from ..protocol.combine import CombineForwardContent
+from ..protocol.quote import BaseQuoteContent
+
+from ..protocol.receipt import BaseReceiptCommand
+from ..protocol.groups import BaseHistoryCommand, BaseGroupCommand
+from ..protocol.groups import InviteGroupCommand, ExpelGroupCommand
+from ..protocol.groups import JoinGroupCommand, QuitGroupCommand, ResetGroupCommand
 
 from .cmd_fact import GeneralCommandFactory
 from .cmd_fact import HistoryCommandFactory
@@ -52,7 +55,11 @@ __all__ = [
 
     'MoneyContent', 'TransferContent',
     'FileContent', 'ImageContent', 'AudioContent', 'VideoContent',
+    'TextContent', 'PageContent', 'NameCard',
+    'CombineContent',
+    'QuoteContent',
 
+    'ReceiptCommand',
     'HistoryCommand', 'GroupCommand',
     'InviteCommand', 'ExpelCommand', 'JoinCommand', 'QuitCommand', 'ResetCommand',
 
@@ -62,12 +69,14 @@ __all__ = [
 
     'BaseMoneyContent', 'TransferMoneyContent',
     'BaseFileContent', 'ImageFileContent', 'AudioFileContent', 'VideoFileContent',
-
-    'BaseHistoryCommand', 'BaseGroupCommand',
-    'InviteGroupCommand', 'ExpelGroupCommand', 'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
-
     'BaseTextContent', 'WebPageContent', 'NameCardContent',
     'CombineForwardContent',
+    'BaseQuoteContent',
+
+    'BaseReceiptCommand',
+    'BaseHistoryCommand', 'BaseGroupCommand',
+    'InviteGroupCommand', 'ExpelGroupCommand',
+    'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
 
     #
     #   Command Factories

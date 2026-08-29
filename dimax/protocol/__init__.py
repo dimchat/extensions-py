@@ -35,16 +35,11 @@
     Application extends for DIM protocol
 """
 
-from .files import FileContent, ImageContent, AudioContent, VideoContent
-# from .files import BaseFileContent, ImageFileContent, AudioFileContent, VideoFileContent
-
-from .groups import HistoryCommand, GroupCommand
-from .groups import InviteCommand, ExpelCommand, JoinCommand, QuitCommand, ResetCommand
-# from .groups import BaseHistoryCommand, BaseGroupCommand
-# from .groups import InviteGroupCommand, ExpelGroupCommand, JoinGroupCommand, QuitGroupCommand, ResetGroupCommand
-
 from .assets import MoneyContent, TransferContent
 # from .assets import BaseMoneyContent, TransferMoneyContent
+
+from .files import FileContent, ImageContent, AudioContent, VideoContent
+# from .files import BaseFileContent, ImageFileContent, AudioFileContent, VideoFileContent
 
 from .contents import TextContent
 from .contents import PageContent, NameCard
@@ -53,6 +48,17 @@ from .contents import PageContent, NameCard
 from .combine import CombineContent
 # from .combine import CombineForwardContent
 
+from .quote import QuoteContent
+# from .quote import BaseQuoteContent
+
+from .receipt import ReceiptCommand
+# from .receipt import BaseReceiptCommand
+
+from .groups import HistoryCommand, GroupCommand
+from .groups import InviteCommand, ExpelCommand, JoinCommand, QuitCommand, ResetCommand
+# from .groups import BaseHistoryCommand, BaseGroupCommand
+# from .groups import InviteGroupCommand, ExpelGroupCommand, JoinGroupCommand, QuitGroupCommand, ResetGroupCommand
+
 
 __all__ = [
 
@@ -60,16 +66,17 @@ __all__ = [
     #  Content Extends
     #
 
-    'FileContent', 'ImageContent', 'AudioContent', 'VideoContent',
     'MoneyContent', 'TransferContent',
-
+    'FileContent', 'ImageContent', 'AudioContent', 'VideoContent',
     'TextContent', 'PageContent', 'NameCard',
     'CombineContent',
+    'QuoteContent',
 
     #
     #  Command Extends
     #
 
+    'ReceiptCommand',
     'HistoryCommand', 'GroupCommand',
     'InviteCommand', 'ExpelCommand', 'JoinCommand', 'QuitCommand', 'ResetCommand',
 
@@ -80,15 +87,15 @@ __all__ = [
     #
     ################################
 
-    # 'BaseFileContent', 'ImageFileContent', 'AudioFileContent', 'VideoFileContent',
-
     # 'BaseMoneyContent', 'TransferMoneyContent',
-
-    # 'BaseHistoryCommand', 'BaseGroupCommand',
-    # 'InviteGroupCommand', 'ExpelGroupCommand', 'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
-
+    # 'BaseFileContent', 'ImageFileContent', 'AudioFileContent', 'VideoFileContent',
     # 'BaseTextContent', 'WebPageContent', 'NameCardContent',
-
     # 'CombineForwardContent',
+    # 'BaseQuoteContent',
+
+    # 'BaseReceiptCommand',
+    # 'BaseHistoryCommand', 'BaseGroupCommand',
+    # 'InviteGroupCommand', 'ExpelGroupCommand',
+    # 'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
 
 ]

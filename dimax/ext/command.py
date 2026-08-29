@@ -32,10 +32,14 @@ from typing import Optional, Union, Any
 
 from dimp import StrMap
 from dimp import Wrapper, Converter
+
+from dimp import Envelope, Content
 from dimp import Command, CommandFactory
 from dimp import ContentFactory
 from dimp import CommandHelper, GeneralCommandHelper
 from dimp import ContentExtension, GeneralMessageExtension, shared_message_extensions
+
+from ..protocol.receipt import BaseReceiptCommand
 
 
 """
@@ -60,6 +64,24 @@ class CommandGeneralFactory(GeneralCommandHelper, CommandHelper):
     def get_cmd(self, content: StrMap, default: Optional[str] = None) -> Optional[str]:
         cmd = content.get('command')
         return Converter.get_str(value=cmd, default=default)
+
+    # Override
+    def create_receipt(self, text: str, envelope: Envelope, content: Optional[Content]) -> Command:
+        origin = envelope.copy_map(deep_copy=False)
+        if 'data' in origin:
+            origin.pop('data', None)
+            origin.pop('keys', None)
+            origin.pop('meta', None)
+            origin.pop('visa', None)
+        if content is not None:
+            origin['sn'] = content.sn
+        receipt = BaseReceiptCommand(text=text, origin=origin)
+        if content is not None:
+            # check group
+            group = content.group
+            if group is not None:
+                receipt.group = group
+        return receipt
 
     #
     #   Command
