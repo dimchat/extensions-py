@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-#
-#   DIMP : Decentralized Instant Messaging Protocol
-#
-#                                Written in 2019 by Moky <albert.moky@gmail.com>
-#
 # ==============================================================================
 # MIT License
 #
@@ -28,34 +23,16 @@
 # SOFTWARE.
 # ==============================================================================
 
-from .btc import BTCAddress
-from .eth import ETHAddress
-from .address_factory import BaseAddressFactory
+from .cache import MemoryCache, ThanosCache
 
-from .id_factory import GeneralIdentifierFactory
-
-from .meta import BaseMeta
-from .meta_factory import DefaultMeta, BTCMeta, ETHMeta
-from .meta_factory import BaseMetaFactory
-
-from .document import BaseDocument
-from .docs import BaseVisa, BaseBulletin
-from .document_factory import GeneralDocumentFactory
+from .ext import MemoryCacheExtension
 
 
 __all__ = [
 
-    'BTCAddress', 'ETHAddress',
-    'BaseAddressFactory',
+    'MemoryCache',
+    'ThanosCache',
 
-    'GeneralIdentifierFactory',
-
-    'BaseMeta',
-    'DefaultMeta', 'BTCMeta', 'ETHMeta',
-    'BaseMetaFactory',
-
-    'BaseDocument',
-    'BaseVisa', 'BaseBulletin',
-    'GeneralDocumentFactory',
+    'MemoryCacheExtension',
 
 ]
