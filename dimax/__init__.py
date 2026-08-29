@@ -43,6 +43,11 @@ from .dkd import *
 from .msg import *
 from .ext import *
 
+from .ext_core import CoreMixIn
+from .ext_entity import EntityMixIn
+from .ext_msg import MessageFactoryMixIn, ContentParser, CommandParser
+from .ext_loader import ExtensionLoader
+
 
 name = "DIM-AX"
 
@@ -129,7 +134,17 @@ __all__ = [
     #   Core Extensions
     #
 
-    'AccountGeneralFactory', 'FormatGeneralFactory',
+    'AccountGeneralFactory',
     'MessageGeneralFactory', 'CommandGeneralFactory',
+
+    #
+    #   Loaders
+    #
+
+    'CoreMixIn',
+    'EntityMixIn',
+    'MessageFactoryMixIn',
+    'ContentParser', 'CommandParser',
+    'ExtensionLoader',
 
 ]

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 #
-#   DIMP : Decentralized Instant Messaging Protocol
+#   DIM-AX : Decentralized Instant Messaging Application eXtensions
 #
-#                                Written in 2019 by Moky <albert.moky@gmail.com>
+#                                Written in 2025 by Moky <albert.moky@gmail.com>
 #
 # ==============================================================================
 # MIT License
 #
-# Copyright (c) 2019 Albert Moky
+# Copyright (c) 2025 Albert Moky
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -28,18 +28,41 @@
 # SOFTWARE.
 # ==============================================================================
 
-from .account import AccountGeneralFactory
-from .message import MessageGeneralFactory
-from .command import CommandGeneralFactory
+from .ext_core import CoreMixIn
+from .ext_entity import EntityMixIn
+from .ext_msg import MessageFactoryMixIn
 
 
-__all__ = [
+# noinspection PyMethodMayBeStatic
+class ExtensionLoader(CoreMixIn, EntityMixIn, MessageFactoryMixIn):
 
-    #
-    #   Core Extensions
-    #
+    def load(self):
+        """ Register core factories """
+        self._load_core_helpers()
 
-    'AccountGeneralFactory',
-    'MessageGeneralFactory', 'CommandGeneralFactory',
+        self._load_entity_factories()
 
-]
+        self._load_message_factories()
+
+    def _load_core_helpers(self):
+        """ Core extensions """
+        self.register_account_helpers()
+
+        self.register_message_helpers()
+        self.register_command_helpers()
+
+    def _load_entity_factories(self):
+        """ ID, Address, Meta, Document parsers """
+        self.register_id_factory()
+        self.register_address_factory()
+
+        self.register_meta_factories()
+
+        self.register_document_factories()
+
+    def _load_message_factories(self):
+        """ Message, Envelope, Content parsers """
+        self.register_message_factories()
+
+        self.register_content_factories()
+        self.register_command_factories()
