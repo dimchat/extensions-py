@@ -72,6 +72,7 @@ __all__ = [
     #
 
     'ReceiptCommand',
+    'MetaCommand', 'DocumentCommand',
     'HistoryCommand', 'GroupCommand',
     'InviteCommand', 'ExpelCommand', 'JoinCommand', 'QuitCommand', 'ResetCommand',
 
@@ -121,6 +122,7 @@ __all__ = [
     #
 
     'BaseReceiptCommand',
+    'BaseMetaCommand', 'BaseDocumentCommand',
     'BaseHistoryCommand', 'BaseGroupCommand',
     'InviteGroupCommand', 'ExpelGroupCommand', 'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
 

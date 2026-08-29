@@ -54,6 +54,9 @@ from .quote import QuoteContent
 from .receipt import ReceiptCommand
 # from .receipt import BaseReceiptCommand
 
+from .commands import MetaCommand, DocumentCommand
+# from .commands import BaseMetaCommand, BaseDocumentCommand
+
 from .groups import HistoryCommand, GroupCommand
 from .groups import InviteCommand, ExpelCommand, JoinCommand, QuitCommand, ResetCommand
 # from .groups import BaseHistoryCommand, BaseGroupCommand
@@ -77,6 +80,7 @@ __all__ = [
     #
 
     'ReceiptCommand',
+    'MetaCommand', 'DocumentCommand',
     'HistoryCommand', 'GroupCommand',
     'InviteCommand', 'ExpelCommand', 'JoinCommand', 'QuitCommand', 'ResetCommand',
 
@@ -94,6 +98,7 @@ __all__ = [
     # 'BaseQuoteContent',
 
     # 'BaseReceiptCommand',
+    # 'BaseMetaCommand', 'BaseDocumentCommand',
     # 'BaseHistoryCommand', 'BaseGroupCommand',
     # 'InviteGroupCommand', 'ExpelGroupCommand',
     # 'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',

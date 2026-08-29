@@ -71,6 +71,8 @@ class ReceiptCommand(Command, ABC):
         }
     """
 
+    RECEIPT = 'receipt'
+
     @property
     @abstractmethod
     def text(self) -> str:
@@ -138,7 +140,7 @@ class BaseReceiptCommand(BaseCommand, ReceiptCommand):
         if content is None:
             # 1. new command with text & origin info
             assert text is not None, f'receipt text should not be None, {origin}'
-            cmd = Command.RECEIPT
+            cmd = ReceiptCommand.RECEIPT
             super().__init__(cmd=cmd)
             # text message
             self['text'] = text

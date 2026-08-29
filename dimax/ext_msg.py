@@ -36,22 +36,28 @@ from dimp import Command, CommandFactory
 from dimp import Envelope, InstantMessage, SecureMessage, ReliableMessage
 from dimp import BaseContent
 
-# not migrated yet (still from dimp)
-from dimp import BaseQuoteContent, ListContent, SecretContent
-from dimp import BaseMetaCommand, BaseDocumentCommand, BaseReceiptCommand
+from dimp import ListContent, SecretContent
 
-from .msg import MessageFactory
+from .protocol import ReceiptCommand
+from .protocol import MetaCommand, DocumentCommand
+
+from .dkd import BaseMoneyContent, TransferMoneyContent
+from .dkd import BaseFileContent, ImageFileContent, AudioFileContent, VideoFileContent
+from .dkd import BaseTextContent, WebPageContent, NameCardContent
+from .dkd import CombineForwardContent
+from .dkd import BaseQuoteContent
+
+from .dkd import BaseReceiptCommand
+from .dkd import BaseMetaCommand, BaseDocumentCommand
+from .dkd import GroupCommand, InviteGroupCommand
+from .dkd import ExpelGroupCommand, JoinGroupCommand
+from .dkd import QuitGroupCommand, ResetGroupCommand
+
 from .dkd import GeneralCommandFactory
 from .dkd import HistoryCommandFactory
 from .dkd import GroupCommandFactory
 
-from .protocol.contents import BaseTextContent, WebPageContent, NameCardContent
-from .protocol.files import BaseFileContent, ImageFileContent, AudioFileContent, VideoFileContent
-from .protocol.assets import BaseMoneyContent, TransferMoneyContent
-from .protocol.combine import CombineForwardContent
-from .protocol.groups import GroupCommand, InviteGroupCommand
-from .protocol.groups import ExpelGroupCommand, JoinGroupCommand
-from .protocol.groups import QuitGroupCommand, ResetGroupCommand
+from .msg import MessageFactory
 
 
 # noinspection PyMethodMayBeStatic
@@ -127,13 +133,13 @@ class MessageFactoryMixIn:
     def register_command_factories(self):
         """ Core command factories """
         # Meta Command
-        self._set_command_factory(cmd=Command.META, command_class=BaseMetaCommand)
+        self._set_command_factory(cmd=MetaCommand.META, command_class=BaseMetaCommand)
 
         # Document Command
-        self._set_command_factory(cmd=Command.DOCUMENTS, command_class=BaseDocumentCommand)
+        self._set_command_factory(cmd=DocumentCommand.DOCUMENTS, command_class=BaseDocumentCommand)
 
         # Receipt Command
-        self._set_command_factory(cmd=Command.RECEIPT, command_class=BaseReceiptCommand)
+        self._set_command_factory(cmd=ReceiptCommand.RECEIPT, command_class=BaseReceiptCommand)
 
         # Group Commands
         self._set_command_factory(cmd='group', factory=GroupCommandFactory())

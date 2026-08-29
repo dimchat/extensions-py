@@ -38,6 +38,7 @@ from ..protocol.combine import CombineForwardContent
 from ..protocol.quote import BaseQuoteContent
 
 from ..protocol.receipt import BaseReceiptCommand
+from ..protocol.commands import BaseMetaCommand, BaseDocumentCommand
 from ..protocol.groups import BaseHistoryCommand, BaseGroupCommand
 from ..protocol.groups import InviteGroupCommand, ExpelGroupCommand
 from ..protocol.groups import JoinGroupCommand, QuitGroupCommand, ResetGroupCommand
@@ -60,6 +61,7 @@ __all__ = [
     'QuoteContent',
 
     'ReceiptCommand',
+    'MetaCommand', 'DocumentCommand',
     'HistoryCommand', 'GroupCommand',
     'InviteCommand', 'ExpelCommand', 'JoinCommand', 'QuitCommand', 'ResetCommand',
 
@@ -74,6 +76,7 @@ __all__ = [
     'BaseQuoteContent',
 
     'BaseReceiptCommand',
+    'BaseMetaCommand', 'BaseDocumentCommand',
     'BaseHistoryCommand', 'BaseGroupCommand',
     'InviteGroupCommand', 'ExpelGroupCommand',
     'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
