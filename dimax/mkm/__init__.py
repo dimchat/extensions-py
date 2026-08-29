@@ -28,67 +28,14 @@
 # SOFTWARE.
 # ==============================================================================
 
-"""
-    DIM-AX
-    ~~~~~~
-
-    Decentralized Instant Messaging Application eXtensions
-"""
-
-
-from .protocol import *
-from .mkm import *
-from .dkd import *
-
-
-name = "DIM-AX"
-
-__author__ = 'Albert Moky'
+from .meta import BaseMeta
+from .document import BaseDocument
+from .docs import BaseVisa, BaseBulletin
 
 
 __all__ = [
 
-    #
-    #   Content Extends
-    #
-
-    'FileContent', 'ImageContent', 'AudioContent', 'VideoContent',
-    'MoneyContent', 'TransferContent',
-
-    #
-    #  Command Extends
-    #
-
-    'HistoryCommand', 'GroupCommand',
-    'InviteCommand', 'ExpelCommand', 'JoinCommand', 'QuitCommand', 'ResetCommand',
-
-
-    ################################
-    #
-    #   Implementations
-    #
-    ################################
-
-    #
-    #   Account Implementations
-    #
-
     'BaseMeta',
     'BaseDocument', 'BaseVisa', 'BaseBulletin',
-
-    #
-    #   Content Implementations
-    #
-
-    'BaseFileContent', 'ImageFileContent', 'AudioFileContent', 'VideoFileContent',
-
-    'BaseMoneyContent', 'TransferMoneyContent',
-
-    #
-    #   Command Implementations
-    #
-
-    'BaseHistoryCommand', 'BaseGroupCommand',
-    'InviteGroupCommand', 'ExpelGroupCommand', 'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
 
 ]
