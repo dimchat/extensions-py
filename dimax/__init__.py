@@ -69,6 +69,9 @@ __all__ = [
     'PortableNetworkFile',
     'PortableNetworkFileWrapper',
 
+    'BaseNetworkDataFactory', 'BaseNetworkFileFactory',
+    # 'TransportableMixIn',
+
     'TransportableFileHelper',
     'TransportableFileExtension',
     'TransportableFileWrapperExtension',
@@ -159,6 +162,7 @@ __all__ = [
 
     'AccountGeneralFactory',
     'MessageGeneralFactory', 'CommandGeneralFactory',
+    'FormatGeneralFactory',
 
     #
     #   Loaders

@@ -35,6 +35,7 @@ from ..format.file_wrapper import TransportableFileWrapperExtension
 from .account import AccountGeneralFactory
 from .message import MessageGeneralFactory
 from .command import CommandGeneralFactory
+from .format import FormatGeneralFactory
 
 
 __all__ = [
@@ -53,5 +54,7 @@ __all__ = [
 
     'AccountGeneralFactory',
     'MessageGeneralFactory', 'CommandGeneralFactory',
+
+    'FormatGeneralFactory',
 
 ]

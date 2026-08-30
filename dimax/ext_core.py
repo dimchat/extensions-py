@@ -39,8 +39,13 @@ from dimp import GeneralMessageExtension, shared_message_extensions
 
 from dimp import CommandExtension, CmdExtension
 
+from dimp import FormatExtensions, shared_format_extensions
+
+from .format.file import TransportableFileExtension
+
 from .ext import AccountGeneralFactory
 from .ext import MessageGeneralFactory, CommandGeneralFactory
+from .ext import FormatGeneralFactory
 
 
 # noinspection PyMethodMayBeStatic
@@ -78,6 +83,14 @@ class CoreMixIn:
         ext.cmd_helper = helper
         ext.command_helper = helper
 
+    # protected
+    def register_format_helpers(self):
+        # format
+        helper = FormatGeneralFactory()
+        ext = format_extensions()
+        ext.pnf_helper = helper
+        ext.ted_helper = helper
+
 
 def account_extensions() -> Union[AddressExtension, IDExtension, MetaExtension, DocumentExtension,
                                   GeneralAccountExtension]:
@@ -92,3 +105,7 @@ def message_extensions() -> Union[MessageExtensions, ContentExtension,
 
 def command_extensions() -> Union[CommandExtension, CmdExtension]:
     return shared_message_extensions
+
+
+def format_extensions() -> Union[FormatExtensions, TransportableFileExtension]:
+    return shared_format_extensions

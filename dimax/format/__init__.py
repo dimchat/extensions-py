@@ -30,6 +30,9 @@ from .file_wrapper import TransportableFileWrapper, TransportableFileWrapperFact
 from .pnf import PortableNetworkFile
 from .pnf_wrapper import PortableNetworkFileWrapper
 
+from .trans import BaseNetworkDataFactory, BaseNetworkFileFactory
+# from .trans import TransportableMixIn
+
 
 __all__ = [
 
@@ -44,5 +47,8 @@ __all__ = [
 
     'PortableNetworkFile',
     'PortableNetworkFileWrapper',
+
+    'BaseNetworkDataFactory', 'BaseNetworkFileFactory',
+    # 'TransportableMixIn',
 
 ]
