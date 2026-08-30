@@ -36,11 +36,10 @@ from dimp import StrMap, MutableStrMap
 
 from dimp import ID
 from dimp import Content
-
-from dimp import TransportableFile
-
 from dimp import ContentType
 from dimp import BaseContent
+
+from ..format import TransportableFile
 
 
 class TextContent(Content, ABC):

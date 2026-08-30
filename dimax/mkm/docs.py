@@ -34,12 +34,14 @@ from dimp import StrMap
 from dimp import Converter
 
 from dimp import PublicKey, EncryptKey
-from dimp import TransportableData
-from dimp import ID
 
-from dimp import TransportableFile
+from dimp import ID
 from dimp import DocumentType
 from dimp import Visa, Bulletin
+
+from dimp import TransportableData
+
+from ..format import TransportableFile
 
 from .document import BaseDocument
 

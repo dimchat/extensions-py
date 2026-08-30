@@ -33,17 +33,17 @@ from typing import Optional
 
 from dimp import URI
 from dimp import StrMap, MutableStrMap
-
-from dimp import TransportableData
 from dimp import DecryptKey
-from dimp import Content
-
-from dimp import TransportableFile
-from dimp import TransportableFileWrapper
-from dimp import PortableNetworkFile
 
 from dimp import ContentType
+from dimp import Content
 from dimp import BaseContent
+
+from dimp import TransportableData
+
+from ..format import TransportableFile
+from ..format import TransportableFileWrapper
+from ..format import PortableNetworkFile
 
 
 class FileContent(Content, ABC):
