@@ -35,6 +35,13 @@
     Application extends for DIM protocol
 """
 
+from .version import MetaType, DocumentType
+
+from .docs import Visa, Bulletin
+
+from .forward import ForwardContent
+from .array import ArrayContent
+
 from .assets import MoneyContent, TransferContent
 # from .assets import BaseMoneyContent, TransferMoneyContent
 
@@ -64,6 +71,15 @@ from .groups import InviteCommand, ExpelCommand, JoinCommand, QuitCommand, Reset
 
 
 __all__ = [
+
+    #
+    #   Versions & Documents
+    #
+
+    'MetaType', 'DocumentType',
+    'Visa', 'Bulletin',
+
+    'ForwardContent', 'ArrayContent',
 
     #
     #  Content Extends
