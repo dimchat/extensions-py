@@ -39,7 +39,7 @@ from dimp import InstantMessage, InstantMessageFactory
 from dimp import SecureMessage, SecureMessageFactory
 from dimp import ReliableMessage, ReliableMessageFactory
 
-from dimp import GeneralMessageHelper
+from dimp import MessageHandler
 from dimp import ContentHelper
 from dimp import EnvelopeHelper
 from dimp import InstantMessageHelper
@@ -59,7 +59,7 @@ except TypeError:
     ContentFactoryMap = typing.MutableMapping[str, ContentFactory]
 
 
-class MessageGeneralFactory(GeneralMessageHelper, ContentHelper, EnvelopeHelper,
+class MessageGeneralFactory(MessageHandler, ContentHelper, EnvelopeHelper,
                             InstantMessageHelper, SecureMessageHelper, ReliableMessageHelper):
 
     def __init__(self):

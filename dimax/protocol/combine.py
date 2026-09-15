@@ -32,10 +32,12 @@ from abc import ABC, abstractmethod
 from typing import List
 
 from dimp import StrMap, MutableStrMap
+
+from dimp import ContentType
 from dimp import Content
 from dimp import InstantMessage
-from dimp import ContentType
-from dimp import BaseContent
+
+from .base import BaseContent
 
 
 class CombineContent(Content, ABC):

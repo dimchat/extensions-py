@@ -30,11 +30,10 @@
 
 from typing import Optional
 
-from dimp import ID, IDFactory
 from dimp import Address
-from dimp import Meta
-
+from dimp import ID, IDFactory
 from dimp import Identifier
+from dimp import Meta
 
 from ..mem.ext import id_cache
 

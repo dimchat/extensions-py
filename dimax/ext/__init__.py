@@ -28,25 +28,13 @@
 # SOFTWARE.
 # ==============================================================================
 
-from ..format.file import TransportableFileHelper
-from ..format.file import TransportableFileExtension
-from ..format.file_wrapper import TransportableFileWrapperExtension
 
 from .account import AccountGeneralFactory
 from .message import MessageGeneralFactory
 from .command import CommandGeneralFactory
-from .format import FormatGeneralFactory
 
 
 __all__ = [
-
-    #
-    #   Format
-    #
-
-    'TransportableFileHelper',
-    'TransportableFileExtension',
-    'TransportableFileWrapperExtension',
 
     #
     #   Core Extensions
@@ -54,7 +42,5 @@ __all__ = [
 
     'AccountGeneralFactory',
     'MessageGeneralFactory', 'CommandGeneralFactory',
-
-    'FormatGeneralFactory',
 
 ]

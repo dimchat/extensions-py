@@ -33,10 +33,12 @@ from typing import Optional, Union
 from dimp import StrMap
 from dimp import Content, ContentFactory
 from dimp import Command, CommandFactory
-from dimp import BaseCommand
-from dimp import CommandExtension, CmdExtension, shared_message_extensions
+
+from dimp import CommandHandler, GeneralCommandExtension
+from dimp import CommandExtension, shared_message_extensions
 
 from ..protocol.groups import BaseHistoryCommand, BaseGroupCommand
+from ..protocol.base import BaseCommand
 
 
 """
@@ -108,17 +110,21 @@ class GroupCommandFactory(HistoryCommandFactory):
         return BaseGroupCommand(content=content)
 
 
+def message_extensions() -> Union[CommandExtension, GeneralCommandExtension]:
+    return shared_message_extensions
+
+
+def command_handler() -> CommandHandler:
+    ext = message_extensions()
+    return ext.command_handler
+
+
 def get_cmd(content: StrMap, default: Optional[str] = None) -> Optional[str]:
-    ext = command_extensions()
-    helper = ext.cmd_helper
+    helper = command_handler()
     return helper.get_cmd(content=content, default=default)
 
 
 def get_command_factory(cmd: str) -> Optional[CommandFactory]:
-    ext = command_extensions()
+    ext = message_extensions()
     helper = ext.command_helper
     return helper.get_command_factory(cmd=cmd)
-
-
-def command_extensions() -> Union[CommandExtension, CmdExtension]:
-    return shared_message_extensions

@@ -12,7 +12,7 @@ import io
 
 from setuptools import setup, find_packages
 
-__version__ = '2.0.0'
+__version__ = '2.5.0'
 __author__ = 'Albert Moky'
 __contact__ = 'albert.moky@gmail.com'
 
@@ -39,6 +39,6 @@ setup(
         'Operating System :: OS Independent',
     ],
     install_requires=[
-        'dimp>=2.4.3',
+        'dimp>=2.5.0',
     ]
 )

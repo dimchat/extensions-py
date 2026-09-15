@@ -29,14 +29,14 @@
 
 from typing import List
 
-from mkm.types import StrMap, MutableStrMap
+from dimp import StrMap, MutableStrMap
 
-from dkd.protocol import Content
+from dimp import Content
 
 from dimp import ContentType
 
 from ..protocol.array import ArrayContent
-from .base import BaseContent
+from ..protocol.base import BaseContent
 
 
 class ListContent(BaseContent, ArrayContent):

@@ -29,15 +29,13 @@
 
 from typing import List
 
-from mkm.types import StrMap, MutableStrMap
+from dimp import StrMap, MutableStrMap
 
-from dkd.protocol import Content
-from dkd.protocol import ReliableMessage
-
+from dimp import ReliableMessage
 from dimp import ContentType
 
-from ..protocol.forward import ForwardContent
-from .base import BaseContent
+from ..protocol import ForwardContent
+from ..protocol.base import BaseContent
 
 
 class SecretContent(BaseContent, ForwardContent):

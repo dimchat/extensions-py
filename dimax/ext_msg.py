@@ -34,9 +34,9 @@ from dimp import StrMap
 from dimp import Content, ContentFactory, ContentType
 from dimp import Command, CommandFactory
 from dimp import Envelope, InstantMessage, SecureMessage, ReliableMessage
-from dimp import BaseContent
+from .dkd.base import BaseContent
 
-from dimp import ListContent, SecretContent
+from .dkd import ListContent, SecretContent
 
 from .protocol import ReceiptCommand
 from .protocol import MetaCommand, DocumentCommand

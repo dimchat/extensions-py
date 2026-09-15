@@ -38,10 +38,8 @@ from dimp import Converter
 
 from dimp import VerifyKey, SignKey
 from dimp import TransportableData
-from dimp import json_encode, json_decode, utf8_encode
+from dimp import JSONMap, UTF8
 from dimp import Document
-
-from dimp import Base64Data
 
 
 """
@@ -161,7 +159,7 @@ class BaseDocument(Dictionary, Document):
         elif signature is None or len(signature) == 0:
             # signature error
             self.__status = -1
-        elif public_key.verify(data=utf8_encode(string=data), signature=signature):
+        elif public_key.verify(data=UTF8.encode(string=data), signature=signature):
             # signature matched
             self.__status = 1
         else:
@@ -193,11 +191,11 @@ class BaseDocument(Dictionary, Document):
         if info is None:
             # assert False, f'document invalid: {self.to_map()}'
             return None
-        data = json_encode(info)
+        data = JSONMap.encode(info)
         assert len(data) > 0, f'should not happen: {info}'
-        signature = private_key.sign(data=utf8_encode(string=data))
+        signature = private_key.sign(data=UTF8.encode(string=data))
         assert len(signature) > 0, f'should not happen: {info}'
-        ted = Base64Data.create(binary=signature)
+        ted = TransportableData.create(data=signature)
         # 3. update 'data' & 'signature' fields
         self['data'] = data                  # JsON string
         self['signature'] = ted.serialize()  # BASE-64
@@ -225,7 +223,7 @@ class BaseDocument(Dictionary, Document):
                 info = {}
             else:
                 # get properties from data
-                info = json_decode(string=data)
+                info = JSONMap.decode(data)
                 assert isinstance(info, MutableMapping), f'document data error: {data}'
             self.__properties = info
         return info

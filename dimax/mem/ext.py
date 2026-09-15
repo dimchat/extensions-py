@@ -26,15 +26,15 @@
 from typing import Union
 
 from dimp import ID, Address
-from dimp import GeneralAccountHelper
+from dimp import AccountHandler
 from dimp import GeneralAccountExtension, shared_account_extensions
 
 from .cache import MemoryCache, ThanosCache
 
 
-def account_helper() -> GeneralAccountHelper:
+def account_handler() -> AccountHandler:
     ext = account_extensions()
-    return ext.helper
+    return ext.handler
 
 
 # -----------------------------------------------------------------------------

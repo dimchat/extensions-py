@@ -33,13 +33,13 @@ from typing import Optional
 
 from dimp import URI
 from dimp import StrMap, MutableStrMap
+from dimp import TransportableFile
 
 from dimp import ID
 from dimp import Content
 from dimp import ContentType
-from dimp import BaseContent
 
-from ..format import TransportableFile
+from .base import BaseContent
 
 
 class TextContent(Content, ABC):

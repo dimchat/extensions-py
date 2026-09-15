@@ -30,13 +30,15 @@
 from abc import ABC
 from typing import Optional
 
-from dimp import DateTime, StrMap, Dictionary
-from dimp import ID
-from dimp import ContentType
-from dimp import cmd_helper, message_helper
+from dimp import DateTime
+from dimp import StrMap, Dictionary
 
-from dkd.protocol import Envelope, Content
-from dkd.protocol import InstantMessage
+from dimp import ID
+from dimp import InstantMessage
+from dimp import ContentType
+from dimp import Content, Command
+from dimp import CommandHandler, GeneralCommandExtension
+from dimp import shared_message_extensions
 
 
 class BaseContent(Dictionary, Content):
@@ -69,7 +71,7 @@ class BaseContent(Dictionary, Content):
     def type(self) -> str:
         """ message content type: text, image, ... """
         if self.__type is None:
-            helper = message_helper()
+            helper = shared_message_extensions.handler
             self.__type = helper.get_content_type(content=super().to_map(), default='')
             # self.__type = self.get_int(key='type', default=0)
         return self.__type
@@ -96,7 +98,7 @@ class BaseContent(Dictionary, Content):
         self.set_string(key='group', value=identifier)
 
 
-class BaseCommand(BaseContent, ABC):
+class BaseCommand(BaseContent, Command, ABC):
 
     def __init__(self, content: StrMap = None, msg_type: str = None, cmd: str = None):
         # check parameters
@@ -114,6 +116,15 @@ class BaseCommand(BaseContent, ABC):
 
     @property  # Override
     def cmd(self) -> str:
-        helper = cmd_helper()
+        helper = command_handler()
         return helper.get_cmd(content=super().to_map(), default='')
         # return self.get_str(key='command', default='')
+
+
+def message_extensions() -> GeneralCommandExtension:
+    return shared_message_extensions
+
+
+def command_handler() -> CommandHandler:
+    ext = message_extensions()
+    return ext.command_handler

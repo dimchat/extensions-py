@@ -30,8 +30,8 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from dkd.protocol import Content
-from dkd.protocol import ReliableMessage
+from dimp import Content
+from dimp import ReliableMessage
 
 
 class ForwardContent(Content, ABC):

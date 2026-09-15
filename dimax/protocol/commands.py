@@ -38,7 +38,8 @@ from dimp import ID
 from dimp import Meta, Document
 
 from dimp import Command
-from dimp import BaseCommand
+
+from .base import BaseCommand
 
 
 #############################

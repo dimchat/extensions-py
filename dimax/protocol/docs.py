@@ -30,11 +30,11 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from mkm.crypto import EncryptKey
-from mkm.protocol import ID
-from mkm.protocol import Document
-
 from dimp import TransportableFile
+from dimp import EncryptKey
+
+from dimp import ID
+from dimp import Document
 
 
 class Visa(Document, ABC):

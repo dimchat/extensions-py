@@ -33,17 +33,15 @@ from typing import Optional
 
 from dimp import URI
 from dimp import StrMap, MutableStrMap
+from dimp import TransportableData
+from dimp import TransportableFile
+from dimp import TransportableFileWrapper
 from dimp import DecryptKey
 
 from dimp import ContentType
 from dimp import Content
-from dimp import BaseContent
 
-from dimp import TransportableData
-
-from ..format import TransportableFile
-from ..format import TransportableFileWrapper
-from ..format import PortableNetworkFile
+from .base import BaseContent
 
 
 class FileContent(Content, ABC):
@@ -133,17 +131,17 @@ class FileContent(Content, ABC):
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.password setter'
         )
 
+    # #
+    # #   PNF transforming
+    # #
     #
-    #   PNF transforming
-    #
-
-    @property
-    @abstractmethod
-    def transportable_file(self) -> TransportableFile:
-        """ Convert to PNF """
-        raise NotImplementedError(
-            f'Not implemented: {type(self).__module__}.{type(self).__name__}.transportable_file getter'
-        )
+    # @property
+    # @abstractmethod
+    # def transportable_file(self) -> TransportableFile:
+    #     """ Convert to PNF """
+    #     raise NotImplementedError(
+    #         f'Not implemented: {type(self).__module__}.{type(self).__name__}.transportable_file getter'
+    #     )
 
     #
     #  Factories
@@ -341,12 +339,12 @@ class BaseFileContent(BaseContent, FileContent):
         wrapper = self.__wrapper
         return wrapper.to_map()
 
-    @property  # Override
-    def transportable_file(self) -> TransportableFile:
-        """ clone without serializations """
-        info = super().to_map()
-        wrapper = self.__wrapper
-        return PortableNetworkFile(dictionary=info, wrapper=wrapper)
+    # @property  # Override
+    # def transportable_file(self) -> TransportableFile:
+    #     """ clone without serializations """
+    #     info = super().to_map()
+    #     wrapper = self.__wrapper
+    #     return PortableNetworkFile(dictionary=info, wrapper=wrapper)
 
     @property  # Override
     def data(self) -> Optional[TransportableData]:
@@ -409,14 +407,14 @@ class ImageFileContent(BaseFileContent, ImageContent):
         # OK
         return super().to_map()
 
-    @property  # Override
-    def transportable_file(self) -> TransportableFile:
-        # serialize 'thumbnail'
-        img = self.__thumbnail
-        if img is not None and self.get('thumbnail') is None:
-            self['thumbnail'] = img.serialize()
-        # clone without other serializations
-        return super().transportable_file
+    # @property  # Override
+    # def transportable_file(self) -> TransportableFile:
+    #     # serialize 'thumbnail'
+    #     img = self.__thumbnail
+    #     if img is not None and self.get('thumbnail') is None:
+    #         self['thumbnail'] = img.serialize()
+    #     # clone without other serializations
+    #     return super().transportable_file
 
     @property  # Override
     def thumbnail(self) -> Optional[TransportableFile]:
@@ -472,14 +470,14 @@ class VideoFileContent(BaseFileContent, VideoContent):
         # OK
         return super().to_map()
 
-    @property  # Override
-    def transportable_file(self) -> TransportableFile:
-        # serialize 'snapshot'
-        img = self.__snapshot
-        if img is not None and self.get('snapshot') is None:
-            self['snapshot'] = img.serialize()
-        # clone without other serializations
-        return super().transportable_file
+    # @property  # Override
+    # def transportable_file(self) -> TransportableFile:
+    #     # serialize 'snapshot'
+    #     img = self.__snapshot
+    #     if img is not None and self.get('snapshot') is None:
+    #         self['snapshot'] = img.serialize()
+    #     # clone without other serializations
+    #     return super().transportable_file
 
     @property  # Override
     def snapshot(self) -> Optional[TransportableFile]:

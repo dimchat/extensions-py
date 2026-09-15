@@ -39,11 +39,12 @@ from dimp import Address, AddressFactory
 from dimp import ID, IDFactory
 from dimp import Meta, MetaFactory
 from dimp import Document, DocumentFactory
-from dimp import DocumentType
 
 from dimp import AddressHelper, IDHelper
 from dimp import MetaHelper, DocumentHelper
-from dimp import GeneralAccountHelper
+from dimp import AccountHandler
+
+from ..protocol import DocumentType
 
 
 """
@@ -60,7 +61,7 @@ except TypeError:
     DocumentFactoryMap = typing.MutableMapping[str, DocumentFactory]
 
 
-class AccountGeneralFactory(GeneralAccountHelper,
+class AccountGeneralFactory(AccountHandler,
                             AddressHelper, IDHelper,
                             MetaHelper, DocumentHelper):
     """ Account GeneralFactory """

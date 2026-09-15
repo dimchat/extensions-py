@@ -34,10 +34,10 @@ from typing import Optional
 from dimp import StrMap
 from dimp import Converter
 
+from dimp import ContentType
 from dimp import Content, Envelope
 
-from dimp import ContentType
-from dimp import BaseContent
+from .base import BaseContent
 
 
 class QuoteContent(Content, ABC):

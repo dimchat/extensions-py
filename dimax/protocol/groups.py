@@ -45,7 +45,8 @@ from dimp import ID
 
 from dimp import ContentType
 from dimp import Command
-from dimp import BaseCommand
+
+from .base import BaseCommand
 
 
 # noinspection PyAbstractClass

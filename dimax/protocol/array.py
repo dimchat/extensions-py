@@ -30,7 +30,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from dkd.protocol import Content
+from dimp import Content
 
 
 class ArrayContent(Content, ABC):

@@ -32,8 +32,8 @@ from typing import Optional
 
 from dimp import final
 from dimp import ConstantString
-from dimp import sha256, ripemd160
-from dimp import base58_encode, base58_decode
+from dimp import SHA256, RIPEMD160
+from dimp import Base58
 from dimp import Address
 
 
@@ -75,14 +75,14 @@ class BTCAddress(ConstantString, Address):
         :param network:     address type
         :return: Address object
         """
-        # 1. digest = ripemd160(sha256(fingerprint))
-        digest = ripemd160(sha256(fingerprint))
+        # 1. digest = RIPEMD160.digest(SHA256.digest(fingerprint))
+        digest = RIPEMD160.digest(SHA256.digest(fingerprint))
         # 2. head = network + digest
         head = chr(network).encode('latin1') + digest
         # 3. cc = sha256(sha256(head)).prefix(4)
         code = check_code(head)
         # 4. data = base58_encode(head + cc)
-        address = base58_encode(head + code)
+        address = Base58.encode(data=head + code)
         return cls(address=address, network=network)
 
     @classmethod
@@ -96,7 +96,7 @@ class BTCAddress(ConstantString, Address):
         if len(address) < 26 or len(address) > 35:
             return None
         # decode
-        data = base58_decode(address)
+        data = Base58.decode(string=address)
         if data is None or len(data) != 25:
             return None
         # check code
@@ -109,4 +109,4 @@ class BTCAddress(ConstantString, Address):
 
 def check_code(data: bytes) -> bytes:
     # check code in BTC address
-    return sha256(sha256(data))[:4]
+    return SHA256.digest(SHA256.digest(data))[:4]

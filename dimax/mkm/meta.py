@@ -35,10 +35,10 @@ from dimp import StrMap
 from dimp import Dictionary
 
 from dimp import TransportableData
-from dimp import utf8_encode
+from dimp import UTF8
 from dimp import VerifyKey, PublicKey
 from dimp import Meta
-from dimp import GeneralAccountHelper
+from dimp import AccountHandler
 from dimp import GeneralAccountExtension, shared_account_extensions
 
 
@@ -112,7 +112,7 @@ class BaseMeta(Dictionary, Meta, ABC):
     @property  # Override
     def type(self) -> str:
         if self.__type is None:
-            helper = account_helper()
+            helper = account_handler()
             info = super().to_map()
             self.__type = helper.get_meta_type(meta=info, default='')
             # self.__type = self.get_int(key='type', default=0)
@@ -195,7 +195,7 @@ class BaseMeta(Dictionary, Meta, ABC):
             # meta error
             return False
         # verify fingerprint
-        data = utf8_encode(string=seed)
+        data = UTF8.encode(string=seed)
         signature = fingerprint.to_bytes()
         if signature is None or len(signature) == 0:
             # TED error
@@ -207,6 +207,6 @@ def account_extensions() -> GeneralAccountExtension:
     return shared_account_extensions
 
 
-def account_helper() -> GeneralAccountHelper:
+def account_handler() -> AccountHandler:
     ext = account_extensions()
-    return ext.helper
+    return ext.handler

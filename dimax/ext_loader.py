@@ -28,15 +28,13 @@
 # SOFTWARE.
 # ==============================================================================
 
-from .format.trans import TransportableMixIn
-
 from .ext_core import CoreMixIn
 from .ext_entity import EntityMixIn
 from .ext_msg import MessageFactoryMixIn
 
 
 # noinspection PyMethodMayBeStatic
-class ExtensionLoader(TransportableMixIn, CoreMixIn, EntityMixIn, MessageFactoryMixIn):
+class ExtensionLoader(CoreMixIn, EntityMixIn, MessageFactoryMixIn):
 
     def load(self):
         """ Register core factories """
@@ -46,16 +44,12 @@ class ExtensionLoader(TransportableMixIn, CoreMixIn, EntityMixIn, MessageFactory
 
         self._load_message_factories()
 
-        self._load_format_factories()
-
     def _load_core_helpers(self):
         """ Core extensions """
         self.register_account_helpers()
 
         self.register_message_helpers()
         self.register_command_helpers()
-
-        self.register_format_helpers()
 
     def _load_entity_factories(self):
         """ ID, Address, Meta, Document parsers """
@@ -73,7 +67,3 @@ class ExtensionLoader(TransportableMixIn, CoreMixIn, EntityMixIn, MessageFactory
         self.register_content_factories()
         self.register_command_factories()
 
-    def _load_format_factories(self):
-        """ TED, PNF parsers """
-        self.register_ted_factory()
-        self.register_pnf_factory()

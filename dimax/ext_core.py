@@ -35,17 +35,14 @@ from dimp import GeneralAccountExtension, shared_account_extensions
 
 from dimp import MessageExtensions, ContentExtension
 from dimp import InstantMessageExtension, SecureMessageExtension, ReliableMessageExtension
-from dimp import GeneralMessageExtension, shared_message_extensions
+from dimp import MessageHandlerExtension, shared_message_extensions
 
-from dimp import CommandExtension, CmdExtension
+from dimp import CommandExtension
 
-from dimp import FormatExtensions, shared_format_extensions
 
-from .format.file import TransportableFileExtension
 
 from .ext import AccountGeneralFactory
 from .ext import MessageGeneralFactory, CommandGeneralFactory
-from .ext import FormatGeneralFactory
 
 
 # noinspection PyMethodMayBeStatic
@@ -83,15 +80,6 @@ class CoreMixIn:
         ext.cmd_helper = helper
         ext.command_helper = helper
 
-    # protected
-    def register_format_helpers(self):
-        # format
-        helper = FormatGeneralFactory()
-        ext = format_extensions()
-        ext.pnf_helper = helper
-        ext.ted_helper = helper
-
-
 def account_extensions() -> Union[AddressExtension, IDExtension, MetaExtension, DocumentExtension,
                                   GeneralAccountExtension]:
     return shared_account_extensions
@@ -99,13 +87,12 @@ def account_extensions() -> Union[AddressExtension, IDExtension, MetaExtension, 
 
 def message_extensions() -> Union[MessageExtensions, ContentExtension,
                                   InstantMessageExtension, SecureMessageExtension, ReliableMessageExtension,
-                                  GeneralMessageExtension]:
+                                  MessageHandlerExtension]:
     return shared_message_extensions
 
 
-def command_extensions() -> Union[CommandExtension, CmdExtension]:
+def command_extensions() -> CommandExtension:
     return shared_message_extensions
 
 
-def format_extensions() -> Union[FormatExtensions, TransportableFileExtension]:
-    return shared_format_extensions
+

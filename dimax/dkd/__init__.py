@@ -30,10 +30,10 @@
 
 from ..protocol import *
 
-from .base import BaseContent, BaseCommand
 from .forward import SecretContent
 from .array import ListContent
 
+from ..protocol.base import BaseContent, BaseCommand
 from ..protocol.files import BaseFileContent, ImageFileContent, AudioFileContent, VideoFileContent
 from ..protocol.assets import BaseMoneyContent, TransferMoneyContent
 

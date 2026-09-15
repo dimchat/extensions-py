@@ -32,10 +32,13 @@ from typing import Optional
 
 from dimp import StrMap
 from dimp import TransportableData
-from dimp import DocumentType
+
 from dimp import Document, DocumentFactory
 
-from ..mem.ext import account_helper
+from dimp import AccountHandler, GeneralAccountExtension
+from dimp import shared_account_extensions
+
+from ..protocol import DocumentType
 
 from .document import BaseDocument
 from .docs import BaseVisa, BaseBulletin
@@ -94,7 +97,7 @@ class GeneralDocumentFactory(DocumentFactory):
         # elif 'did' not in document:
         #     # document.did should not be empty
         #     return None
-        helper = account_helper()
+        helper = doc_helper()
         # create document for type
         doc_type = helper.get_document_type(document=document)
         if doc_type == DocumentType.VISA:
@@ -103,3 +106,12 @@ class GeneralDocumentFactory(DocumentFactory):
             return BaseBulletin(document=document)
         else:
             return BaseDocument(document=document)
+
+
+def account_extensions() -> GeneralAccountExtension:
+    return shared_account_extensions
+
+
+def doc_helper() -> AccountHandler:
+    ext = account_extensions()
+    return ext.handler

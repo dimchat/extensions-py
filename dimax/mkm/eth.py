@@ -32,8 +32,8 @@ from typing import Optional
 
 from dimp import final
 from dimp import ConstantString
-from dimp import keccak256
-from dimp import hex_encode
+from dimp import KECCAK256
+from dimp import Hex
 from dimp import Address, EntityType
 
 
@@ -86,10 +86,10 @@ class ETHAddress(ConstantString, Address):
             fingerprint = fingerprint[1:]
         assert len(fingerprint) == 64, f'key data length error: {len(fingerprint)}'
         # 1. digest = keccak256(fingerprint)
-        digest = keccak256(data=fingerprint)
+        digest = KECCAK256.digest(data=fingerprint)
         # 2. address = hex_encode(digest.suffix(20))
         tail = digest[-20:]
-        address = '0x' + eip55(address=hex_encode(data=tail))
+        address = '0x' + eip55(address=Hex.encode(data=tail))
         return cls(address=address)
 
     @classmethod
@@ -107,7 +107,7 @@ class ETHAddress(ConstantString, Address):
 # https://eips.ethereum.org/EIPS/eip-55
 def eip55(address: str) -> str:
     res = ''
-    table = keccak256(address.encode('utf-8'))
+    table = KECCAK256.digest(data=address.encode('utf-8'))
     for i in range(40):
         ch = address[i]
         x = ord(ch)

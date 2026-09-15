@@ -35,10 +35,10 @@ from dimp import StrMap
 from dimp import Converter
 
 from dimp import ID
+from dimp import ContentType
 from dimp import Content
 
-from dimp import ContentType
-from dimp import BaseContent
+from .base import BaseContent
 
 
 class MoneyContent(Content, ABC):
