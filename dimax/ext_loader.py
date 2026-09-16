@@ -38,20 +38,20 @@ class ExtensionLoader(CoreMixIn, EntityMixIn, MessageFactoryMixIn):
 
     def load(self):
         """ Register core factories """
-        self._load_core_helpers()
+        self._load_core_extensions()
 
-        self._load_entity_factories()
+        self._load_entity_extensions()
 
-        self._load_message_factories()
+        self._load_message_extensions()
 
-    def _load_core_helpers(self):
+    def _load_core_extensions(self):
         """ Core extensions """
         self.register_account_helpers()
 
         self.register_message_helpers()
         self.register_command_helpers()
 
-    def _load_entity_factories(self):
+    def _load_entity_extensions(self):
         """ ID, Address, Meta, Document parsers """
         self.register_id_factory()
         self.register_address_factory()
@@ -60,7 +60,7 @@ class ExtensionLoader(CoreMixIn, EntityMixIn, MessageFactoryMixIn):
 
         self.register_document_factories()
 
-    def _load_message_factories(self):
+    def _load_message_extensions(self):
         """ Message, Envelope, Content parsers """
         self.register_message_factories()
 

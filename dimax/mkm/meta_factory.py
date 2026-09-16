@@ -43,8 +43,8 @@ from dimp import shared_account_extensions
 
 from ..protocol import MetaType
 
-from .btc import BTCAddress
-from .eth import ETHAddress
+from .address_btc import BTCAddress
+from .address_eth import ETHAddress
 from .meta import BaseMeta
 
 

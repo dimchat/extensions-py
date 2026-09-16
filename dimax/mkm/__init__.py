@@ -28,8 +28,8 @@
 # SOFTWARE.
 # ==============================================================================
 
-from .btc import BTCAddress
-from .eth import ETHAddress
+from .address_btc import BTCAddress
+from .address_eth import ETHAddress
 from .address_factory import BaseAddressFactory
 
 from .id_factory import GeneralIdentifierFactory
@@ -40,12 +40,13 @@ from .meta_factory import BaseMetaFactory
 
 from .document import BaseDocument
 from .docs import BaseVisa, BaseBulletin
-from .document_factory import GeneralDocumentFactory
+from .doc_factory import GeneralDocumentFactory
 
 
 __all__ = [
 
-    'BTCAddress', 'ETHAddress',
+    'BTCAddress',
+    'ETHAddress',
     'BaseAddressFactory',
 
     'GeneralIdentifierFactory',

@@ -36,8 +36,8 @@ from dimp import ANYWHERE, EVERYWHERE
 
 from ..mem.ext import address_cache
 
-from .btc import BTCAddress
-from .eth import ETHAddress
+from .address_btc import BTCAddress
+from .address_eth import ETHAddress
 
 
 class BaseAddressFactory(AddressFactory, ABC):

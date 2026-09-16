@@ -89,3 +89,15 @@ def address_cache() -> MemoryCache[str, Address]:
 def id_cache() -> MemoryCache[str, ID]:
     ext = account_extensions()
     return ext.id_cache
+
+
+def reduce_memory() -> int:
+    """ Call it when received 'UIApplicationDidReceiveMemoryWarningNotification',
+        this will remove 50% of cached objects.
+
+        Returns the number of survivors.
+    """
+    ext = account_extensions()
+    cnt1 = ext.address_cache.reduce_memory()
+    cnt2 = ext.id_cache.reduce_memory()
+    return cnt1 + cnt2

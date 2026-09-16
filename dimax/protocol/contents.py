@@ -205,11 +205,11 @@ class PageContent(Content, ABC):
         return WebPageContent(url=url, html=html, title=title, desc=desc, icon=icon)
 
     @classmethod
-    def create_with_url(cls, url: URI, title: str, desc: Optional[str], icon: Optional[TransportableFile]):
+    def create_from_url(cls, url: URI, title: str, desc: Optional[str], icon: Optional[TransportableFile]):
         return cls.create(url=url, html=None, title=title, desc=desc, icon=icon)
 
     @classmethod
-    def create_with_html(cls, html: str, title: str, desc: Optional[str], icon: Optional[TransportableFile]):
+    def create_from_html(cls, html: str, title: str, desc: Optional[str], icon: Optional[TransportableFile]):
         return cls.create(url=None, html=html, title=title, desc=desc, icon=icon)
 
 

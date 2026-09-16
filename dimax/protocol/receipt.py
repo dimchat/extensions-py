@@ -44,7 +44,7 @@ from dimp import Converter
 from dimp import Envelope, Content
 from dimp import Command
 
-from dimp import CommandHelper, CommandExtension
+from dimp import CommandHandler, GeneralCommandExtension
 from dimp import shared_message_extensions
 
 from .base import BaseCommand
@@ -120,20 +120,20 @@ class ReceiptCommand(Command, ABC):
         :param content:  original message body
         :return: ReceiptCommand
         """
-        helper = command_helper()
+        helper = command_handler()
         content = helper.create_receipt(text=text, envelope=envelope, content=content)
         if isinstance(content, ReceiptCommand):
             return content
         assert False, f'invalid receipt: {content}'
 
 
-def command_extensions() -> CommandExtension:
+def command_extensions() -> GeneralCommandExtension:
     return shared_message_extensions
 
 
-def command_helper() -> CommandHelper:
+def command_handler() -> CommandHandler:
     ext = command_extensions()
-    return ext.command_helper
+    return ext.command_handler
 
 
 ###############################
