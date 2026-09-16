@@ -55,6 +55,10 @@ except TypeError:
 
 
 class CommandGeneralFactory(CommandHandler, CommandHelper):
+    """General command helper.
+
+    Creates/parses commands and manages command factories.
+    """
 
     def __init__(self):
         super().__init__()
@@ -119,7 +123,11 @@ class CommandGeneralFactory(CommandHandler, CommandHelper):
 
 
 def default_factory(info: StrMap) -> Optional[CommandFactory]:
-    """ get factory by content type """
+    """Get the default command factory.
+
+    `info` is the raw command map; returns the factory
+    registered for the 'command' field, or the 'ANY' factory.
+    """
     msg_type = get_content_type(content=info)
     if msg_type is not None:
         fact = get_content_factory(msg_type)

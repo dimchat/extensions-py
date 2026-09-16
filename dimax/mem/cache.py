@@ -33,36 +33,85 @@ K = TypeVar('K')
 V = TypeVar('V')
 
 
+# -----------------------------------------------------------------------------
+#  MemoryCache (Generic Cache Interface)
+# -----------------------------------------------------------------------------
+
+
 class MemoryCache(Generic[K, V], ABC):
+    """Generic in-memory cache interface with memory reduction capability.
+
+    Defines the core contract for key-value cache operations, plus a specialized
+    method to reduce memory usage (critical for mobile/resource-constrained environments).
+
+    Type Parameters:
+    `K` is the type of cache keys (must be hashable).
+    `V` is the type of cache values (can be nullable).
+    """
 
     @property
     @abstractmethod
     def size(self) -> int:
-        """ Get cached size """
+        """Returns the current number of entries in the cache.
+
+        Returns a non-negative integer representing the count of
+        cached key-value pairs.
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.size getter'
         )
 
     @abstractmethod
     def get(self, key: K) -> Optional[V]:
-        """ Get cached value for key """
+        """Retrieves a value from the cache by key.
+
+        `key` is the cache key to look up (non-null).
+
+        Returns the cached value (null if key not found or value is null).
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.get()'
         )
 
     @abstractmethod
     def put(self, key: K, value: Optional[V]):
-        """ Cache value for key """
+        """Stores a value in the cache.
+
+        `key` is the cache key to associate with the value (non-null).
+        `value` is the value to cache (null = remove the key from cache).
+
+        Returns the previous value associated with the key (null if none).
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.put()'
         )
 
     def reduce_memory(self) -> int:
-        """ Garbage Collection """
+        """Reduces cache memory usage by evicting entries (implementation-specific logic).
+
+        Returns the number of entries remaining in the cache after reduction.
+        """
         pass
 
 
+# -----------------------------------------------------------------------------
+#  ThanosCache (Half-Life Cache Implementation)
+# -----------------------------------------------------------------------------
+
+
 class ThanosCache(MemoryCache[K, V]):
+    """Implementation of `MemoryCache` with "Thanos-style" memory reduction.
+
+    Core feature: the `reduce_memory` method removes **exactly half** of the
+    cache entries (inspired by Thanos snapping his fingers to kill half the
+    universe), making it a deterministic eviction policy for memory optimization.
+
+    `K` is the type of cache keys (must be hashable).
+    `V` is the type of cache values (can be nullable).
+
+    Note: uses a standard `dict` as the underlying storage,
+    with O(1) get/put operations.
+    """
 
     def __init__(self):
         super().__init__()
@@ -91,7 +140,24 @@ class ThanosCache(MemoryCache[K, V]):
 
 
 def thanos(planet: MutableMapping, finger: int) -> int:
-    """ Thanos can kill half lives of a world with a snap of the finger """
+    """Thanos-style cache eviction function - removes half of the map entries.
+
+    "Thanos can kill half lives of a world with a snap of the finger"
+
+    Eviction logic:
+    - iterates through map entries in insertion order;
+    - removes entries where the incremented finger counter is odd
+      (keeps even entries);
+    - guarantees exactly 50% of entries are removed (deterministic eviction).
+
+    `planet` is the map (cache) to "snap" (modify in-place).
+    `finger` is the starting counter value (typically 0 for fresh snap).
+
+    Returns the final value of the finger counter (total number of
+    entries processed).
+
+    Note: modifies the input map directly (in-place operation).
+    """
     people = planet.keys()
     for anybody in people:
         if (++finger & 1) == 1:

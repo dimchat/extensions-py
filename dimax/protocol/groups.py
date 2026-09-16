@@ -51,45 +51,56 @@ from .base import BaseCommand
 
 # noinspection PyAbstractClass
 class HistoryCommand(Command, ABC):
+    """History command interface for recording operational history.
+
+    Base interface for all history-tracking commands, which record the timestamp
+    and parameters of system operations (e.g., group member changes).
+
+    All group-related commands implement this interface to form the group's change history.
+
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x89),
+      "sn"   : 12345,
+
+      "command" : "...",   // Unique history command name
+      "time"    : 123.45,  // Timestamp when the command was executed
+
+      "extra"   : info     // Optional command-specific parameters
+    }
+    ```
     """
-        History Command
-        ~~~~~~~~~~~~~~~
 
-        data format: {
-            "type" : i2s(0x89),
-            "sn"   : 12345,
-
-            "command" : "...",   // command name
-            "time"    : 123.45,  // command timestamp
-            "extra"   : info     // command parameters
-        }
-    """
-
-    # -------- command names begin --------
+    # -------- history command names begin --------
     # account
     REGISTER = "register"
     SUICIDE = "suicide"
-    # -------- command names end --------
+    # -------- history command names end --------
 
 
 class GroupCommand(HistoryCommand, ABC):
+    """Group command interface for tracking group member/role changes.
+
+    Extends `HistoryCommand` to define group-specific operations, which collectively
+    form the complete change history of a group's member information (members, admins, owner).
+
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x89),
+      "sn"   : 12345,
+
+      "command" : "reset",          // "invite", "quit", "query", ...
+      "time"    : 123.45,           // Timestamp of the group operation
+
+      "group"   : "{GROUP_ID}",     // Target group ID
+      "members" : ["{MEMBER_ID}",]  // List of affected member IDs
+    }
+    ```
     """
-        Group Command
-        ~~~~~~~~~~~~~
 
-        data format: {
-            "type" : i2s(0x89),
-            "sn"   : 12345,
-
-            "command" : "reset",   // "invite", "quit", ...
-            "time"    : 123.45,    // command timestamp
-
-            "group"   : "{GROUP_ID}",
-            "members" : ["{MEMBER_ID}",]
-        }
-    """
-
-    # -------- command names begin --------
+    # -------- group command names begin --------
     # founder/owner
     FOUND = "found"
     ABDICATE = "abdicate"
@@ -104,12 +115,12 @@ class GroupCommand(HistoryCommand, ABC):
     HIRE = "hire"
     FIRE = "fire"
     RESIGN = "resign"
-    # -------- command names end --------
+    # -------- group command names end --------
 
     @property
     @abstractmethod
     def members(self) -> Optional[List[ID]]:
-        """ Get group members """
+        """List of member IDs affected by this group command."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.members getter'
         )
@@ -123,7 +134,7 @@ class GroupCommand(HistoryCommand, ABC):
         )
 
     #
-    #   Factory methods
+    #   Factories
     #
 
     @classmethod
@@ -154,6 +165,11 @@ class GroupCommand(HistoryCommand, ABC):
 
 # noinspection PyAbstractClass
 class InviteCommand(GroupCommand, ABC):
+    """Group invite command interface.
+
+    Used to record the history of inviting users to join a group.
+    The `members` field contains the IDs of users being invited.
+    """
 
     @property
     @abstractmethod
@@ -166,7 +182,11 @@ class InviteCommand(GroupCommand, ABC):
 
 # noinspection PyAbstractClass
 class ExpelCommand(GroupCommand, ABC):
-    """ Deprecated (use 'reset' instead) """
+    """Group expel command interface (DEPRECATED).
+
+    Originally used to record the history of expelling members from a group.
+    This command is deprecated - use `ResetCommand` (RESET) instead for member removal.
+    """
 
     @property
     @abstractmethod
@@ -179,6 +199,11 @@ class ExpelCommand(GroupCommand, ABC):
 
 # noinspection PyAbstractClass
 class JoinCommand(GroupCommand, ABC):
+    """Group join command interface.
+
+    Used to record the history of users voluntarily joining a group.
+    The `members` field contains the ID of the user joining the group.
+    """
 
     @property
     @abstractmethod
@@ -191,6 +216,11 @@ class JoinCommand(GroupCommand, ABC):
 
 # noinspection PyAbstractClass
 class QuitCommand(GroupCommand, ABC):
+    """Group quit command interface.
+
+    Used to record the history of members voluntarily leaving a group.
+    The `members` field contains the ID of the member quitting the group.
+    """
 
     @property
     @abstractmethod
@@ -203,6 +233,26 @@ class QuitCommand(GroupCommand, ABC):
 
 # noinspection PyAbstractClass
 class ResetCommand(GroupCommand, ABC):
+    """Group reset command interface.
+
+    Used to record the history of resetting the full list of group members,
+    replacing deprecated commands like EXPEL and QUERY. This command is the
+    standard way to update the complete member list (add/remove multiple members).
+
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x89),
+      "sn"   : 12345,
+
+      "command" : "reset",
+      "time"    : 123.45,        // Timestamp of the reset operation
+
+      "group"   : "{GROUP_ID}",  // Target group ID
+      "members" : [...]          // Full list of current group members after reset
+    }
+    ```
+    """
 
     @property
     @abstractmethod

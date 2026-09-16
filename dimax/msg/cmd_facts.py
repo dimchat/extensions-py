@@ -48,6 +48,7 @@ from ..protocol.base import BaseCommand
 
 
 class GeneralCommandFactory(ContentFactory, CommandFactory):
+    """General command factory."""
 
     # Override
     def parse_content(self, content: StrMap) -> Optional[Content]:
@@ -74,6 +75,10 @@ class GeneralCommandFactory(ContentFactory, CommandFactory):
 
 
 class HistoryCommandFactory(GeneralCommandFactory):
+    """History command factory.
+
+    Creates history commands (with 'history' parameter).
+    """
 
     # Override
     def parse_command(self, content: StrMap) -> Optional[Command]:
@@ -88,6 +93,11 @@ class HistoryCommandFactory(GeneralCommandFactory):
 
 
 class GroupCommandFactory(HistoryCommandFactory):
+    """Group command factory.
+
+    Creates group commands, dispatching by the group command
+    name (invite/expel/join/quit/reset/...).
+    """
 
     # Override
     def parse_content(self, content: StrMap) -> Optional[Content]:

@@ -38,22 +38,25 @@ from .base import BaseContent
 
 
 class ArrayContent(Content, ABC):
-    """
-        Content Array message
-        ~~~~~~~~~~~~~~~~~~~~~
+    """Content array interface for sending multiple contents in one message.
 
-        data format: {
-            "type" : i2s(0xCA),
-            "sn"   : 12345,
+    Enables packaging multiple different types of `Content` into a single message.
 
-            "contents" : [...]  // content array
-        }
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0xCA),
+      "sn"   : 12345,
+
+      "contents" : [...]  // Array of different content types
+    }
+    ```
     """
 
     @property
     @abstractmethod
     def contents(self) -> List[Content]:
-        """ Get content list """
+        """Array of multiple message contents (can be different types)."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.contents getter'
         )

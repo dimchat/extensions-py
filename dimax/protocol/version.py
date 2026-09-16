@@ -32,29 +32,28 @@ from dimp import final
 
 @final
 class MetaType:
-    """
-        @enum MetaType
+    """@enum MetaType
 
-        @abstract Defined for algorithm that generating address.
+    @abstract Defined for algorithm that generating address.
 
-        @discussion Generate and check ID/Address
+    @discussion Generate and check ID/Address
 
-            MetaType_MKM give a seed string first, and sign this seed to get
-            fingerprint; after that, use the fingerprint to generate address.
-            This will get a firmly relationship between (username, address and key).
+        MetaType_MKM give a seed string first, and sign this seed to get
+        fingerprint; after that, use the fingerprint to generate address.
+        This will get a firmly relationship between (username, address and key).
 
-            MetaType_BTC use the key data to generate address directly.
-            This can build a BTC address for the entity ID (no username).
+        MetaType_BTC use the key data to generate address directly.
+        This can build a BTC address for the entity ID (no username).
 
-            MetaType_ExBTC use the key data to generate address directly, and
-            sign the seed to get fingerprint (just for binding username and key).
-            This can build a BTC address, and bind a username to the entity ID.
+        MetaType_ExBTC use the key data to generate address directly, and
+        sign the seed to get fingerprint (just for binding username and key).
+        This can build a BTC address, and bind a username to the entity ID.
 
-        Bits:
-            0000 0001 - this meta contains seed as ID.name
-            0000 0010 - this meta generate BTC address
-            0000 0100 - this meta generate ETH address
-        ...
+    Bits:
+        0000 0001 - this meta contains seed as ID.name
+        0000 0010 - this meta generate BTC address
+        0000 0100 - this meta generate ETH address
+    ...
     """
 
     DEFAULT = '1'
@@ -73,6 +72,15 @@ class MetaType:
 
 @final
 class DocumentType:
+    """Document types.
+
+    data format: {
+        "type"      : "visa",  // document type
+        "data"      : "{JsON data}",
+        "signature" : "{Base64 signature}",
+        ...         // other properties
+    }
+    """
 
     VISA = 'visa'          # for user info (communicate key)
 

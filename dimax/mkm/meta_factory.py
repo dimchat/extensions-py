@@ -48,22 +48,18 @@ from .address_eth import ETHAddress
 from .meta import BaseMeta
 
 
-"""
-    Default Meta to build ID with 'name@address'
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+class DefaultMeta(BaseMeta):
+    """Default Meta to build ID with 'name@address'.
 
     version:
-        1 - MKM
+        1 = MKM
 
     algorithm:
         CT      = fingerprint = sKey.sign(seed);
         hash    = ripemd160(sha256(CT));
         code    = sha256(sha256(network + hash)).prefix(4);
         address = base58_encode(network + hash + code);
-"""
-
-
-class DefaultMeta(BaseMeta):
+    """
 
     @property  # Override
     def has_seed(self) -> bool:
@@ -79,22 +75,18 @@ class DefaultMeta(BaseMeta):
         return BTCAddress.from_data(data, network=network)
 
 
-"""
-    Meta to build BTC address for ID
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+class BTCMeta(BaseMeta):
+    """Meta to build BTC address for ID.
 
     version:
-        2 - BTC
+        2 = BTC
 
     algorithm:
         CT      = key.data;
         hash    = ripemd160(sha256(CT));
         code    = sha256(sha256(network + hash)).prefix(4);
         address = base58_encode(network + hash + code);
-"""
-
-
-class BTCMeta(BaseMeta):
+    """
 
     @property  # Override
     def has_seed(self) -> bool:
@@ -111,21 +103,17 @@ class BTCMeta(BaseMeta):
         return BTCAddress.from_data(data, network=network)
 
 
-"""
-    Meta to build ETH address for ID
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+class ETHMeta(BaseMeta):
+    """Meta to build ETH address for ID.
 
     version:
-        4 - ETH
+        4 = ETH
 
     algorithm:
-        fingerprint = key.data
-        digest      = keccak256(fingerprint)
-        address     = hex_encode(digest.suffix(20))
-"""
-
-
-class ETHMeta(BaseMeta):
+        CT      = key.data;  // without prefix byte
+        digest  = keccak256(CT);
+        address = hex_encode(digest.suffix(20));
+    """
 
     @property  # Override
     def has_seed(self) -> bool:
@@ -142,8 +130,13 @@ class ETHMeta(BaseMeta):
 
 
 class BaseMetaFactory(MetaFactory):
+    """Base meta factory.
+
+    Creates/parses metas by `type` (mkm/btc/eth/...).
+    """
 
     def __init__(self, version: str):
+        """Create factory for the given meta `type`."""
         super().__init__()
         self.__type = version
 

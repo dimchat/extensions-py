@@ -42,23 +42,24 @@ from .base import BaseContent
 
 
 class MoneyContent(Content, ABC):
-    """
-        Money Message Content
-        ~~~~~~~~~~~~~~~~~~~~~
+    """Money content interface.
 
-        data format: {
-            "type" : i2s(0x40),
-            "sn"   : 12345,
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x40),
+      "sn"   : 12345,
 
-            "currency" : "RMB", // USD, USDT, ...
-            "amount"   : 100.00
-        }
+      "currency" : "RMB", // USD, USDT, ...
+      "amount"   : 100.00
+    }
+    ```
     """
 
     @property
     @abstractmethod
     def currency(self) -> str:
-        """ Get currency """
+        """Currency unit, e.g. RMB, USD, USDT."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.currency getter'
         )
@@ -66,7 +67,7 @@ class MoneyContent(Content, ABC):
     @property
     @abstractmethod
     def amount(self) -> Union[int, float]:
-        """ Get amount """
+        """Money amount value."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.amount getter'
         )
@@ -80,7 +81,7 @@ class MoneyContent(Content, ABC):
         )
 
     #
-    #   Factory method
+    #   Factory
     #
     @classmethod
     def create(cls, currency: str, amount: Union[int, float], msg_type: str = None):
@@ -92,25 +93,27 @@ class MoneyContent(Content, ABC):
 
 
 class TransferContent(MoneyContent, ABC):
-    """
-        Transfer Money Message Content
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    """Transfer money content interface.
+    Extends `MoneyContent` with sender and receiver.
 
-        data format: {
-            "type" : i2s(0x41),
-            "sn"   : 12345,
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x41),
+      "sn"   : 12345,
 
-            "currency" : "RMB",    // USD, USDT, ...
-            "amount"   : 100.00,
-            "remitter" : "{FROM}", // sender ID
-            "remittee" : "{TO}"    // receiver ID
-        }
+      "currency" : "RMB",     // USD, USDT, ...
+      "amount"   : 100.00,
+      "remitter" : "{FROM}",  // sender ID
+      "remittee" : "{TO}"     // receiver ID
+    }
+    ```
     """
 
     @property
     @abstractmethod
     def remitter(self) -> Optional[ID]:
-        """ Get sender """
+        """Payer / sender ID."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.remitter getter'
         )
@@ -126,7 +129,7 @@ class TransferContent(MoneyContent, ABC):
     @property
     @abstractmethod
     def remittee(self) -> Optional[ID]:
-        """ Get receiver """
+        """Payee / receiver ID."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.remittee getter'
         )
@@ -140,7 +143,7 @@ class TransferContent(MoneyContent, ABC):
         )
 
     #
-    #   Factory method
+    #   Factory
     #
     @classmethod
     def transfer(cls, currency: str, amount: Union[int, float]):

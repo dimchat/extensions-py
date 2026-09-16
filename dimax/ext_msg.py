@@ -66,11 +66,19 @@ from .msg import GeneralReliableMessageFactory
 
 # noinspection PyMethodMayBeStatic
 class MessageFactoryMixIn:
-    """ MessageFactory Extensions """
+    """Message factory extensions.
+
+    Registers the default factories for messages, contents, commands
+    and their subtypes, so that they can be parsed by type automatically.
+    """
 
     # protected
     def register_message_factories(self):
-        """ Message factories """
+        """Register the default message factories.
+
+        Sets the factory implementations for envelope, instant,
+        secure and reliable messages.
+        """
         # Envelope factory
         Envelope.set_factory(factory=GeneralEnvelopeFactory())
         # Message factories
@@ -80,7 +88,10 @@ class MessageFactoryMixIn:
 
     # protected
     def register_content_factories(self):
-        """ Core content factories """
+        """Register the default content factories.
+
+        Maps each `ContentType` to its concrete `Content` implementation.
+        """
         # Text
         self._set_content_factory(msg_type=ContentType.TEXT, content_class=BaseTextContent)
 
@@ -126,6 +137,12 @@ class MessageFactoryMixIn:
         self._set_content_factory(msg_type=ContentType.ANY, content_class=BaseContent)
 
     def _set_content_factory(self, msg_type: str, content_class=None, factory: ContentFactory = None):
+        """Register a content factory for the given `msg_type`.
+
+        `msg_type` is the content type, such as "text"/"image"/"file".
+        `factory` is a custom `ContentFactory`; `content_class` is a builder
+        wrapped into a `ContentParser` which checks 'sn' before creating.
+        """
         if factory is not None:
             Content.set_factory(msg_type, factory=factory)
         if content_class is not None:
@@ -134,7 +151,10 @@ class MessageFactoryMixIn:
 
     # protected
     def register_command_factories(self):
-        """ Core command factories """
+        """Register the default command factories.
+
+        Maps each command name to its concrete `Command` implementation.
+        """
         # Meta Command
         self._set_command_factory(cmd=MetaCommand.META, command_class=BaseMetaCommand)
 
@@ -156,6 +176,12 @@ class MessageFactoryMixIn:
         self._set_command_factory(cmd=GroupCommand.RESET, command_class=ResetGroupCommand)
 
     def _set_command_factory(self, cmd: str, command_class=None, factory: CommandFactory = None):
+        """Register a command factory for the given `cmd`.
+
+        `cmd` is the command name, such as "meta"/"documents"/"receipt".
+        `factory` is a custom `CommandFactory`; `command_class` is a builder
+        wrapped into a `CommandParser` which checks 'sn'/'command' before creating.
+        """
         if factory is not None:
             Command.set_factory(cmd=cmd, factory=factory)
         if command_class is not None:
@@ -164,6 +190,11 @@ class MessageFactoryMixIn:
 
 
 class ContentParser(ContentFactory):
+    """Content factory that builds content from a raw map.
+
+    Wraps a content class and verifies that the map contains
+    a 'sn' field before creating the content instance.
+    """
 
     def __init__(self, content_class):
         super().__init__()
@@ -176,6 +207,11 @@ class ContentParser(ContentFactory):
 
 
 class CommandParser(CommandFactory):
+    """Command factory that builds command from a raw map.
+
+    Wraps a command class and verifies that the map contains
+    both 'sn' and 'command' fields before creating the command instance.
+    """
 
     def __init__(self, command_class):
         super().__init__()

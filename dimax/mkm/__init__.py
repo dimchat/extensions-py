@@ -28,6 +28,13 @@
 # SOFTWARE.
 # ==============================================================================
 
+"""
+    Ming-Ke-Ming
+    ～～～～～～～
+
+    Decentralized User Identity Authentication.
+"""
+
 from .address_btc import BTCAddress
 from .address_eth import ETHAddress
 from .address_factory import BaseAddressFactory

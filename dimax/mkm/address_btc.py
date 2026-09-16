@@ -39,20 +39,18 @@ from dimp import Address
 
 @final
 class BTCAddress(ConstantString, Address):
-    """
-        Address like BitCoin
-        ~~~~~~~~~~~~~~~~~~~~
+    """Address like BitCoin.
 
-        data format: "network+digest+code"
-            network    --  1 byte
-            digest     -- 20 bytes
-            check code --  4 bytes
+    data format: "network+digest+code"
+        network    --  1 byte
+        digest     -- 20 bytes
+        check code --  4 bytes
 
-        algorithm:
-            fingerprint = PK.data
-            digest      = ripemd160(sha256(fingerprint));
-            code        = sha256(sha256(network + digest)).prefix(4);
-            address     = base58_encode(network + digest + code);
+    algorithm:
+        fingerprint = PK.data
+        digest      = ripemd160(sha256(fingerprint));
+        code        = sha256(sha256(network + digest)).prefix(4);
+        address     = base58_encode(network + digest + code);
     """
 
     def __init__(self, address: str, network: int):
@@ -68,8 +66,7 @@ class BTCAddress(ConstantString, Address):
     #
     @classmethod
     def from_data(cls, fingerprint: bytes, network: int) -> Address:
-        """
-        Generate address with fingerprint and network ID
+        """Generate BTC address with fingerprint and network ID.
 
         :param fingerprint: meta.fingerprint or key.data
         :param network:     address type
@@ -87,11 +84,10 @@ class BTCAddress(ConstantString, Address):
 
     @classmethod
     def from_str(cls, address: str) -> Optional[Address]:
-        """
-        Parse a string for BTC address
+        """Parse a string for BTC address.
 
         :param address: address string
-        :return: Address object
+        :return: Address object, None on error
         """
         if len(address) < 26 or len(address) > 35:
             return None

@@ -45,32 +45,36 @@ from .base import BaseContent
 
 
 class FileContent(Content, ABC):
-    """
-        File Message Content
-        ~~~~~~~~~~~~~~~~~~~~
+    """File message content interface.
 
-        data format: {
-            "type" : i2s(0x10),
-            "sn"   : 12345,
+    Defines the base structure for all file-type messages (image, audio, video, etc.).
+    Files can be embedded as base64 data or downloaded via CDN URL (with encryption).
 
-            "data"     : "...",        // base64_encode(fileContent)
-            "filename" : "photo.png",
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x10),
+      "sn"   : 12345,
 
-            "URL"      : "http://...", // download from CDN
-            // before fileContent uploaded to a public CDN,
-            // it should be encrypted by a symmetric key
-            "key"      : {             // symmetric key to decrypt file content
-                "algorithm" : "AES",   // "DES", ...
-                "data"      : "{BASE64_ENCODE}",
-                ...
-            }
-        }
+      "data"     : "...",         // Base64 encoded file content
+      "filename" : "photo.png",
+
+      "URL"      : "http://...",  // CDN download URL (file is encrypted before upload)
+      "key"      : {              // Symmetric key to decrypt CDN-downloaded file
+        "algorithm" : "AES",      // Encryption algorithm (e.g. AES, DES)
+        "data"      : "{BASE64_ENCODE}"
+      }
+    }
+    ```
     """
 
     @property
     @abstractmethod
     def data(self) -> Optional[TransportableData]:
-        """ Get file data (it's too big to set in the dictionary) """
+        """Embedded file content (Base64 encoded).
+
+        Null if file is only available via CDN URL.
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.data getter'
         )
@@ -86,7 +90,10 @@ class FileContent(Content, ABC):
     @property
     @abstractmethod
     def filename(self) -> Optional[str]:
-        """ Get filename """
+        """Original filename of the file (including extension).
+
+        e.g. "photo.png", "document.pdf"
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.filename getter'
         )
@@ -102,7 +109,10 @@ class FileContent(Content, ABC):
     @property
     @abstractmethod
     def url(self) -> Optional[URI]:
-        """ Get URL """
+        """CDN URL for downloading the encrypted file content.
+
+        File content on CDN is encrypted with a symmetric key (`password`).
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.url getter'
         )
@@ -118,7 +128,10 @@ class FileContent(Content, ABC):
     @property
     @abstractmethod
     def password(self) -> Optional[DecryptKey]:
-        """ Get symmetric key to decrypt the encrypted data from URL """
+        """Symmetric decryption key for CDN-downloaded file content.
+
+        Required to decrypt files downloaded from `url` (file is encrypted before upload to CDN).
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.password getter'
         )
@@ -182,33 +195,36 @@ class FileContent(Content, ABC):
 
 
 class ImageContent(FileContent, ABC):
-    """
-        Image Message Content
-        ~~~~~~~~~~~~~~~~~~~~~
+    """Image message content interface.
 
-        data format: {
-            "type" : i2s(0x12),
-            "sn"   : 12345,
+    Extends `FileContent` with thumbnail support for previewing images.
 
-            "data"     : "...",        // base64_encode(fileContent)
-            "filename" : "photo.png",
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x12),
+      "sn"   : 12345,
 
-            "URL"      : "http://...", // download from CDN
-            // before fileContent uploaded to a public CDN,
-            // it should be encrypted by a symmetric key
-            "key"      : {             // symmetric key to decrypt file content
-                "algorithm" : "AES",   // "DES", ...
-                "data"      : "{BASE64_ENCODE}",
-                ...
-            },
-            "thumbnail" : "data:image/jpeg;base64,..."
-        }
+      "data"     : "...",         // Base64 encoded image content
+      "filename" : "photo.png",
+
+      "URL"      : "http://...",  // CDN download URL (encrypted)
+      "key"      : {              // Symmetric key to decrypt image
+        "algorithm" : "AES",
+        "data"      : "{BASE64_ENCODE}"
+      },
+      "thumbnail": "data:image/jpeg;base64,..."
+    }
+    ```
     """
 
     @property
     @abstractmethod
     def thumbnail(self) -> Optional[TransportableFile]:
-        """ Get thumbnail of image """
+        """Thumbnail preview of the image (Base64 encoded).
+
+        Used for quick preview without downloading the full image file.
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.thumbnail getter'
         )
@@ -223,33 +239,36 @@ class ImageContent(FileContent, ABC):
 
 
 class AudioContent(FileContent, ABC):
-    """
-        Audio Message Content
-        ~~~~~~~~~~~~~~~~~~~~~
+    """Audio message content interface.
 
-        data format: {
-            "type" : i2s(0x14),
-            "sn"   : 12345,
+    Extends `FileContent` with speech-to-text (ASR) support for audio messages.
 
-            "data"     : "...",        // base64_encode(fileContent)
-            "filename" : "photo.png",
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x14),
+      "sn"   : 12345,
 
-            "URL"      : "http://...", // download from CDN
-            // before fileContent uploaded to a public CDN,
-            // it should be encrypted by a symmetric key
-            "key"      : {             // symmetric key to decrypt file content
-                "algorithm" : "AES",   // "DES", ...
-                "data"      : "{BASE64_ENCODE}",
-                ...
-            },
-            "text"     : "..."         // Automatic Speech Recognition
-        }
+      "data"     : "...",         // Base64 encoded audio content
+      "filename" : "voice.mp4",
+
+      "URL"      : "http://...",  // CDN download URL (encrypted)
+      "key"      : {              // Symmetric key to decrypt audio
+        "algorithm" : "AES",
+        "data"      : "{BASE64_ENCODE}"
+      },
+      "text": "..."               // Automatic Speech Recognition (ASR) result
+    }
+    ```
     """
 
     @property
     @abstractmethod
     def duration(self) -> float:
-        """ Duration of the audio in seconds (null if unknown) """
+        """Duration of the audio in seconds.
+
+        Returns the playing duration (null if unknown).
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.duration getter'
         )
@@ -265,7 +284,10 @@ class AudioContent(FileContent, ABC):
     @property
     @abstractmethod
     def text(self) -> Optional[str]:
-        """ Get text (Automatic Speech Recognition) """
+        """Automatic Speech Recognition (ASR) text of the audio.
+
+        Transcribed text from the audio content (null if not transcribed).
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.text getter'
         )
@@ -280,33 +302,36 @@ class AudioContent(FileContent, ABC):
 
 
 class VideoContent(FileContent, ABC):
-    """
-        Video Message Content
-        ~~~~~~~~~~~~~~~~~~~~~
+    """Video message content interface.
 
-        data format: {
-            "type" : i2s(0x16),
-            "sn"   : 12345,
+    Extends `FileContent` with snapshot support for previewing videos.
 
-            "data"     : "...",        // base64_encode(fileContent)
-            "filename" : "photo.png",
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x16),
+      "sn"   : 12345,
 
-            "URL"      : "http://...", // download from CDN
-            // before fileContent uploaded to a public CDN,
-            // it should be encrypted by a symmetric key
-            "key"      : {             // symmetric key to decrypt file content
-                "algorithm" : "AES",   // "DES", ...
-                "data"      : "{BASE64_ENCODE}",
-                ...
-            },
-            "snapshot" : "data:image/jpeg;base64,..."
-        }
+      "data"     : "...",         // Base64 encoded video content
+      "filename" : "movie.mp4",
+
+      "URL"      : "http://...",  // CDN download URL (encrypted)
+      "key"      : {              // Symmetric key to decrypt video
+        "algorithm" : "AES",
+        "data"      : "{BASE64_ENCODE}"
+      },
+      "snapshot": "data:image/jpeg;base64,..."
+    }
+    ```
     """
 
     @property
     @abstractmethod
     def snapshot(self) -> Optional[TransportableFile]:
-        """ Get snapshot of video """
+        """Snapshot (preview image) of the video (Base64 encoded).
+
+        Usually the first frame of the video for quick preview.
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.snapshot getter'
         )

@@ -43,16 +43,16 @@ from .base import BaseContent
 
 
 class TextContent(Content, ABC):
-    """
-        Text Message Content
-        ~~~~~~~~~~~~~~~~~~~~
+    """Text message content interface.
 
-        data format: {
-            "type" : i2s(0x01),
-            "sn"   : 12345,
-
-            "text" : "..."
-        }
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x01),
+      "sn"   : 12345,
+      "text" : "..."
+    }
+    ```
     """
 
     #
@@ -67,7 +67,7 @@ class TextContent(Content, ABC):
         )
 
     #
-    #   Factory method
+    #   Factory
     #
     @classmethod
     def create(cls, text: str):
@@ -75,25 +75,26 @@ class TextContent(Content, ABC):
 
 
 class PageContent(Content, ABC):
-    """
-        Web Page message
-        ~~~~~~~~~~~~~~~~
+    """Web page message content interface.
 
-        data format: {
-            "type" : i2s(0x20),
-            "sn"   : 12345,
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x20),
+      "sn"   : 12345,
 
-            "title" : "...",                // Web title
-            "desc"  : "...",
-            "icon"  : "data:image/x-icon;base64,...",
+      "title" : "...",             // Web title
+      "desc"  : "...",
+      "icon"  : "data:image/x-icon;base64,...",
 
-            "URL"   : "https://github.com/moky/dimp",
+      "URL"   : "https://github.com/moky/dimp",
 
-            "HTML"      : "...",            // Web content
-            "mime_type" : "text/html",      // Content-Type
-            "encoding"  : "utf8",
-            "base"      : "about:blank"     // Base URL
-        }
+      "HTML"      : "...",         // Web content
+      "mime_type" : "text/html",   // Content-Type
+      "encoding"  : "utf8",
+      "base"      : "about:blank"  // Base URL
+    }
+    ```
     """
 
     #
@@ -103,7 +104,7 @@ class PageContent(Content, ABC):
     @property
     @abstractmethod
     def title(self) -> str:
-        """ Get title """
+        """Web page title."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.title getter'
         )
@@ -123,7 +124,7 @@ class PageContent(Content, ABC):
     @property
     @abstractmethod
     def icon(self) -> Optional[TransportableFile]:
-        """ Get icon """
+        """Web icon, usually base64 encoded image."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.icon getter'
         )
@@ -143,7 +144,7 @@ class PageContent(Content, ABC):
     @property
     @abstractmethod
     def desc(self) -> Optional[str]:
-        """ Get description """
+        """Web page description."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.desc getter'
         )
@@ -163,7 +164,7 @@ class PageContent(Content, ABC):
     @property
     @abstractmethod
     def url(self) -> Optional[URI]:
-        """ Get URL """
+        """Web page URL."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.url getter'
         )
@@ -183,7 +184,7 @@ class PageContent(Content, ABC):
     @property
     @abstractmethod
     def html(self) -> Optional[str]:
-        """ Get HTML """
+        """Web page HTML content."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.html getter'
         )
@@ -197,7 +198,7 @@ class PageContent(Content, ABC):
         )
 
     #
-    #   Factory methods
+    #   Factories
     #
     @classmethod
     def create(cls, url: Optional[URI], html: Optional[str], title: str,
@@ -214,24 +215,25 @@ class PageContent(Content, ABC):
 
 
 class NameCard(Content, ABC):
-    """
-        Name Card Content
-        ~~~~~~~~~~~~~~~~~
+    """Name card (contact) content interface.
 
-        data format: {
-            "type" : i2s(0x33),
-            "sn"   : 12345,
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x33),
+      "sn"   : 12345,
 
-            "did"    : "{ID}",        // contact's ID
-            "name"   : "{nickname}}", // contact's name
-            "avatar" : "{URL}"        // avatar - PNF(URL)
-        }
+      "did"    : "{ID}",        // contact's ID
+      "name"   : "{nickname}",  // contact's name
+      "avatar" : "{URL}"        // avatar - PNF(URL)
+    }
+    ```
     """
 
     @property
     @abstractmethod
     def identifier(self) -> ID:
-        """ Get did """
+        """Contact identifier."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.identifier getter'
         )
@@ -239,7 +241,7 @@ class NameCard(Content, ABC):
     @property
     @abstractmethod
     def name(self) -> str:
-        """ Get name """
+        """Contact name or nickname."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.name getter'
         )
@@ -247,13 +249,13 @@ class NameCard(Content, ABC):
     @property
     @abstractmethod
     def avatar(self) -> Optional[TransportableFile]:
-        """ Get avatar """
+        """Contact avatar image."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.avatar getter'
         )
 
     #
-    #   Factory method
+    #   Factory
     #
     @classmethod
     def create(cls, identifier: ID, name: str, avatar: Optional[TransportableFile]):

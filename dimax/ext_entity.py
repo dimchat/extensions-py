@@ -42,35 +42,66 @@ from .mkm import GeneralDocumentFactory
 
 # noinspection PyMethodMayBeStatic
 class EntityMixIn:
-    """ Entity Extensions """
+    """Entity extensions.
+
+    Registers the default factories for address, ID, meta and document,
+    so that entities can be created/parsed by type automatically.
+    """
 
     # protected
     def register_id_factory(self):
+        """Register the default `IDFactory`.
+
+        Sets `IdentifierFactory` as the global ID factory.
+        """
         ID.set_factory(factory=GeneralIdentifierFactory())
 
     # protected
     def register_address_factory(self):
+        """Register the default `AddressFactory`.
+
+        Sets `BaseAddressFactory` as the global address factory.
+        """
         Address.set_factory(factory=BaseAddressFactory())
 
     # protected
     def register_meta_factories(self):
+        """Register the default meta factories (MKM/BTC/ETH)."""
         self._set_meta_factory(version=MetaType.MKM)
         self._set_meta_factory(version=MetaType.BTC)
         self._set_meta_factory(version=MetaType.ETH)
 
     def _set_meta_factory(self, version: str, factory: MetaFactory = None):
+        """Register a meta factory for the given `version`.
+
+        `version` is the meta algorithm type, such as "mkm"/"btc"/"eth".
+        `factory` is the factory instance; if null, a new
+        `BaseMetaFactory` for `version` will be created.
+        """
         if factory is None:
             factory = BaseMetaFactory(version=version)
         Meta.set_factory(version=version, factory=factory)
 
     # protected
     def register_document_factories(self):
+        """Register the default document factories.
+
+        Registers factories for VISA, PROFILE, BULLETIN and the
+        wildcard type '*' (fallback for unknown document types).
+        """
         self._set_document_factory(doc_type='*')
         self._set_document_factory(doc_type=DocumentType.VISA)
         self._set_document_factory(doc_type=DocumentType.PROFILE)
         self._set_document_factory(doc_type=DocumentType.BULLETIN)
 
     def _set_document_factory(self, doc_type: str, factory: DocumentFactory = None):
+        """Register a document factory for the given `doc_type`.
+
+        `doc_type` is the document type, such as "visa"/"profile"/"bulletin";
+        use '*' to register the default factory for unknown types.
+        `factory` is the factory instance; if null, a new
+        `GeneralDocumentFactory` for `doc_type` will be created.
+        """
         if factory is None:
             factory = GeneralDocumentFactory(doc_type=doc_type)
         Document.set_factory(doc_type=doc_type, factory=factory)

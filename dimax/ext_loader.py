@@ -35,9 +35,18 @@ from .ext_msg import MessageFactoryMixIn
 
 # noinspection PyMethodMayBeStatic
 class ExtensionLoader(CoreMixIn, EntityMixIn, MessageFactoryMixIn):
+    """Core extensions loader.
+
+    Mixes in `CoreMixIn`, `EntityMixIn` and `MessageFactoryMixIn` to
+    initialize the whole SDK, registering default helpers and factories.
+    """
 
     def load(self):
-        """ Register core factories """
+        """Register core factories.
+
+        This is the single entry to initialize the extension SDK:
+        loads core helpers, entity factories and message factories.
+        """
         self._load_core_extensions()
 
         self._load_entity_extensions()
@@ -45,14 +54,14 @@ class ExtensionLoader(CoreMixIn, EntityMixIn, MessageFactoryMixIn):
         self._load_message_extensions()
 
     def _load_core_extensions(self):
-        """ Core extensions """
+        """Register core helpers (account/message/command)."""
         self.register_account_helpers()
 
         self.register_message_helpers()
         self.register_command_helpers()
 
     def _load_entity_extensions(self):
-        """ ID, Address, Meta, Document parsers """
+        """Register entity factories (ID/Address/Meta/Document)."""
         self.register_id_factory()
         self.register_address_factory()
 
@@ -61,7 +70,7 @@ class ExtensionLoader(CoreMixIn, EntityMixIn, MessageFactoryMixIn):
         self.register_document_factories()
 
     def _load_message_extensions(self):
-        """ Message, Envelope, Content parsers """
+        """Register message/command factories."""
         self.register_message_factories()
 
         self.register_content_factories()

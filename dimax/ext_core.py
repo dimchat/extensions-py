@@ -45,10 +45,20 @@ from .ext import MessageGeneralFactory, CommandGeneralFactory
 
 # noinspection PyMethodMayBeStatic
 class CoreMixIn:
-    """ Core Extensions """
+    """Core extensions.
+
+    Registers the default account, message and command helpers
+    into the shared extension storages, so that the whole SDK
+    can create/parse entities and messages without extra setup.
+    """
 
     # protected
     def register_account_helpers(self):
+        """Register the account helpers (mkm).
+
+        Sets `GeneralAccountHelper` as the default handler for
+        address/ID/meta/document parsing and generating.
+        """
         # mkm
         helper = AccountGeneralFactory()
         ext = account_extensions()
@@ -60,6 +70,11 @@ class CoreMixIn:
 
     # protected
     def register_message_helpers(self):
+        """Register the message helpers (dkd).
+
+        Sets `GeneralMessageHelper` as the default handler for
+        content/envelope/instant/secure/reliable message operations.
+        """
         # dkd
         helper = MessageGeneralFactory()
         ext = message_extensions()
@@ -72,6 +87,11 @@ class CoreMixIn:
 
     # protected
     def register_command_helpers(self):
+        """Register the command helpers (cmd).
+
+        Sets `GeneralCommandHelper` as the default handler for
+        command parsing and factory management.
+        """
         # cmd
         helper = CommandGeneralFactory()
         ext = command_extensions()

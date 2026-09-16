@@ -38,7 +38,11 @@ from ..mem.ext import id_cache
 
 
 class GeneralIdentifierFactory(IDFactory):
-    """ General ID Factory """
+    """General ID factory.
+
+    Creates/parses entity IDs with cache, concatenating
+    the name, address and terminal components.
+    """
 
     # Override
     def create_id(self, name: Optional[str], address: Address, terminal: Optional[str]) -> ID:
@@ -62,10 +66,21 @@ class GeneralIdentifierFactory(IDFactory):
 
     # noinspection PyMethodMayBeStatic
     def _new_id(self, identifier: str, name: Optional[str], address: Address, terminal: Optional[str]) -> ID:
-        """ override for customized ID """
+        """Create a new `ID` instance.
+
+        `identifier` is the full string form; `name` is the entity name;
+        `address` is the core address; `terminal` is the terminal/location.
+
+        Override this method for customized ID implementations.
+        """
         return Identifier(identifier=identifier, name=name, address=address, terminal=terminal)
 
     def _parse(self, identifier: str) -> Optional[ID]:
+        """Parse an ID string.
+
+        `identifier` is in "name@address[/terminal]" format;
+        returns an `ID` instance if parsing succeeds, null otherwise.
+        """
         # split for "terminal"
         pair = identifier.split('/')
         cnt = len(pair)

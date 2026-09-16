@@ -64,7 +64,11 @@ except TypeError:
 class AccountGeneralFactory(AccountHandler,
                             AddressHelper, IDHelper,
                             MetaHelper, DocumentHelper):
-    """ Account GeneralFactory """
+    """General account helper.
+
+    Creates/parses address, ID, meta and document with the
+    registered factories.
+    """
 
     def __init__(self):
         super().__init__()

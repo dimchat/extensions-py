@@ -45,9 +45,14 @@ from .docs import BaseVisa, BaseBulletin
 
 
 class GeneralDocumentFactory(DocumentFactory):
-    """ General Document Factory """
+    """General document factory.
+
+    Creates documents by `type`, supporting VISA, BULLETIN
+    and other (customized) document types.
+    """
 
     def __init__(self, doc_type: str):
+        """Create factory for the given document `type`."""
         super().__init__()
         self.__type = doc_type
 
@@ -68,7 +73,10 @@ class GeneralDocumentFactory(DocumentFactory):
         return self._create_valid_document(data=data, signature=signature)
 
     def _create_empty_document(self) -> Document:
-        """ create a new empty document """
+        """Create an empty document.
+
+        A new document with default properties will be created.
+        """
         doc_type = self.type
         if doc_type == DocumentType.VISA:
             return BaseVisa()
@@ -78,7 +86,11 @@ class GeneralDocumentFactory(DocumentFactory):
             return BaseDocument(doc_type=doc_type)
 
     def _create_valid_document(self, data: str, signature: TransportableData) -> Document:
-        """ create document with data & signature from local storage """
+        """Create a valid document.
+
+        `data` is the document data in JsON format; `signature`
+        is the signature of `data`.
+        """
         doc_type = self.type
         if doc_type == DocumentType.VISA:
             return BaseVisa(data=data, signature=signature)

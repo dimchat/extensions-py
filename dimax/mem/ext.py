@@ -43,6 +43,7 @@ def account_handler() -> AccountHandler:
 
 
 class MemoryCacheExtension:
+    """Memory cache extensions."""
 
     @property
     def address_cache(self) -> MemoryCache[str, Address]:
@@ -53,7 +54,7 @@ class MemoryCacheExtension:
 
     @address_cache.setter
     def address_cache(self, cache: MemoryCache):
-        """ Set address cache """
+        """Set the address cache."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.address_cache setter'
         )
@@ -67,7 +68,7 @@ class MemoryCacheExtension:
 
     @id_cache.setter
     def id_cache(self, cache: MemoryCache):
-        """ Set ID cache """
+        """Set the ID cache."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.id_cache setter'
         )

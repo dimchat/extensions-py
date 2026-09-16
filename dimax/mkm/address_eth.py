@@ -39,16 +39,14 @@ from dimp import Address, EntityType
 
 @final
 class ETHAddress(ConstantString, Address):
-    """
-        Address like Ethereum
-        ~~~~~~~~~~~~~~~~~~~~~
+    """Address like Ethereum.
 
-        data format: "0x{address}"
+    data format: "0x{address}"
 
-        algorithm:
-            fingerprint = PK.data
-            digest      = keccak256(fingerprint)
-            address     = hex_encode(digest.suffix(20))
+    algorithm:
+        fingerprint = PK.data
+        digest      = keccak256(fingerprint)
+        address     = hex_encode(digest.suffix(20))
     """
 
     def __init__(self, address: str):
@@ -75,8 +73,7 @@ class ETHAddress(ConstantString, Address):
     #
     @classmethod
     def from_data(cls, fingerprint: bytes) -> Address:
-        """
-        Generate ETH address with key.data
+        """Generate ETH address with key.data.
 
         :param fingerprint: key.data
         :return: Address object
@@ -94,11 +91,10 @@ class ETHAddress(ConstantString, Address):
 
     @classmethod
     def from_str(cls, address: str) -> Optional[Address]:
-        """
-        Parse a string for ETH address
+        """Parse a string for ETH address.
 
         :param address: address string
-        :return: Address object
+        :return: Address object, None on error
         """
         if is_eth(address=address):
             return cls(address=address)

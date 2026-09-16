@@ -51,33 +51,41 @@ from .base import BaseCommand
 
 
 class ReceiptCommand(Command, ABC):
+    """Receipt command interface (message acknowledgment/receipt).
+
+    Used to send receipt/acknowledgment for a previously received message,
+    confirming delivery or providing status feedback (via text).
+
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x88),
+      "sn"   : 67890,
+
+      "command": "receipt",  // Fixed command name for receipt messages
+
+      "text"   : "...",      // Receipt comment/feedback text
+      "origin" : {           // Metadata of the original message being acknowledged
+        "sender"   : "...",  // Sender ID of the original message
+        "receiver" : "...",  // Receiver ID of the original message
+        "time"     : 123.45, // Timestamp of the original message
+        "sn"       : 12345,  // Serial number of the original message
+        "signature": "..."   // Signature of the original message (for verification)
+      }
+    }
+    ```
     """
-        Receipt Command
-        ~~~~~~~~~~~~~~~
 
-        data format: {
-            "type" : i2s(0x88),
-            "sn"   : 67890,
-
-            "command" : "receipt",
-
-            "text"    : "...",  // text message
-            "origin"  : {       // original message envelope
-                "sender"    : "...",
-                "receiver"  : "...",
-                "time"      : 123.45,
-                "sn"        : 12345,
-                "signature" : "..."
-            }
-        }
-    """
-
-    RECEIPT = 'receipt'
+    RECEIPT = 'receipt'  # message receipt/acknowledgment
 
     @property
     @abstractmethod
     def text(self) -> str:
-        """ Get text """
+        """Gets the receipt comment/feedback text.
+
+        Can be used to provide status info (e.g., "Message read", "Delivery failed")
+        or custom feedback about the original message.
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.text getter'
         )
@@ -85,7 +93,10 @@ class ReceiptCommand(Command, ABC):
     @property
     @abstractmethod
     def original_envelope(self) -> Optional[Envelope]:
-        """ Get original envelope """
+        """Gets the envelope of the original message being acknowledged.
+
+        Contains sender/receiver/time metadata of the message being receipted.
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.original_envelope getter'
         )
@@ -93,7 +104,10 @@ class ReceiptCommand(Command, ABC):
     @property
     @abstractmethod
     def original_sn(self) -> Optional[int]:
-        """ Get original SN """
+        """Gets the serial number (SN) of the original message being acknowledged.
+
+        Unique identifier of the original message, used to locate it in conversation history.
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.original_sn getter'
         )
@@ -101,7 +115,10 @@ class ReceiptCommand(Command, ABC):
     @property
     @abstractmethod
     def original_signature(self) -> Optional[str]:
-        """ Get original signature (partially maybe) """
+        """Gets the digital signature of the original message being acknowledged.
+
+        Used to verify the authenticity of the original message in the receipt.
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.original_signature getter'
         )
@@ -112,8 +129,17 @@ class ReceiptCommand(Command, ABC):
 
     @classmethod
     def create(cls, text: str, envelope: Envelope, content: Content = None):
-        """
-        Create base receipt command with text & original message info
+        """Creates a `ReceiptCommand` instance with receipt text and original message metadata.
+
+        Automatically purifies the original message's envelope/content using `QuoteHelper`
+        to generate the "origin" field (removes sensitive data). Also handles group message
+        receipt by setting the group ID if present in the original content.
+
+        `text` is the receipt comment/feedback text.
+        `envelope` is the optional envelope of the original message being acknowledged.
+        `content` is the optional content of the original message being acknowledged.
+
+        Returns a new `ReceiptCommand` instance.
 
         :param text:     message text
         :param envelope: original message head

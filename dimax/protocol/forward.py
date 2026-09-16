@@ -39,23 +39,25 @@ from .base import BaseContent
 
 
 class ForwardContent(Content, ABC):
-    """
-        Top-Secret Message Content
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    """Top-secret forward content.
+    Wraps secure and certified messages.
 
-        data format: {
-            "type" : i2s(0xFF),
-            "sn"   : 67890,
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0xFF),
+      "sn"   : 67890,
 
-            "forward" : {...}  // reliable (secure + certified) message
-            "secrets" : [...]  // reliable (secure + certified) messages
-        }
+      "forward" : {...},  // reliable (secure + certified) message
+      "secrets" : [...]   // reliable (secure + certified) messages
+    }
+    ```
     """
 
     @property
     @abstractmethod
     def secrets(self) -> List[ReliableMessage]:
-        """ Get forward messages """
+        """List of secure, certified reliable messages."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.secrets getter'
         )

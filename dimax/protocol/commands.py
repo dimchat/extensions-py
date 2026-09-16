@@ -50,21 +50,24 @@ from .base import BaseCommand
 
 
 class MetaCommand(Command, ABC):
+    """Meta command interface for querying/updating entity metadata.
+
+    Used to request or respond with an entity's core metadata (e.g. user/group info).
+
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x88),
+      "sn"   : 12345,
+
+      "command" : "meta",  // Fixed command name
+      "did"     : "{ID}",  // Target entity ID (user/group ID)
+      "meta"    : {...}    // Entity metadata (null = query request)
+    }
+    ```
     """
-        Meta Command
-        ~~~~~~~~~~~~
 
-        data format: {
-            "type" : i2s(0x88),
-            "sn"   : 12345,
-
-            "command" : "meta", // command name
-            "did"     : "{ID}", // contact's ID
-            "meta"    : {...}   // When meta is empty, means query meta for ID
-        }
-    """
-
-    META = 'meta'
+    META = 'meta'  # querying/updating entity metadata
 
     #
     #   ID
@@ -72,7 +75,10 @@ class MetaCommand(Command, ABC):
     @property
     @abstractmethod
     def identifier(self) -> ID:
-        """ Get did """
+        """Gets the target entity ID (user/group ID) for this meta command.
+
+        This ID identifies the entity whose metadata is being queried or updated.
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.identifier getter'
         )
@@ -83,19 +89,28 @@ class MetaCommand(Command, ABC):
     @property
     @abstractmethod
     def meta(self) -> Optional[Meta]:
-        """ Get meta """
+        """Gets the entity metadata associated with this command.
+
+        - Non-null: Response with metadata for the target `identifier`
+        - Null: Query request for metadata of the target `identifier`
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.meta getter'
         )
 
     #
-    #   Factory methods
+    #   Factories
     #
 
     @classmethod
     def query(cls, identifier: ID):  # -> MetaCommand:
-        """
-        Query meta
+        """Creates a query meta command to request entity metadata.
+
+        Use this to ask for metadata of a specific entity (meta field will be null).
+
+        `identifier` is the target entity ID (user/group ID) to query.
+
+        Returns a `MetaCommand` instance for metadata query.
 
         :param identifier: entity ID
         :return: MetaCommand
@@ -104,8 +119,14 @@ class MetaCommand(Command, ABC):
 
     @classmethod
     def response(cls, identifier: ID, meta: Meta):  # -> MetaCommand:
-        """
-        Response Meta
+        """Creates a response meta command with entity metadata.
+
+        Use this to send metadata back to a query request.
+
+        `identifier` is the target entity ID (user/group ID).
+        `meta` is the metadata to return for the entity.
+
+        Returns a `MetaCommand` instance containing the metadata.
 
         :param identifier: entity ID
         :param meta: entity meta
@@ -115,24 +136,27 @@ class MetaCommand(Command, ABC):
 
 
 class DocumentCommand(MetaCommand, ABC):
+    """Document command interface for querying/updating entity documents.
+
+    Extends `MetaCommand` to support document operations (Visa for users, Bulletin for groups).
+    Used to exchange entity documents or request updates.
+
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x88),
+      "sn"   : 12345,
+
+      "command"   : "documents",  // Fixed command name
+      "did"       : "{ID}",       // Target entity ID (user/group ID)
+      "meta"      : {...},        // Optional metadata (for new friend handshakes)
+      "documents" : [...],        // Entity documents (null = query request)
+      "last_time" : 123.45        // Optional: Timestamp for incremental updates
+    }
+    ```
     """
-        Document Command
-        ~~~~~~~~~~~~~~~~
 
-        data format: {
-            "type" : i2s(0x88),
-            "sn"   : 12345,
-
-            "command"   : "documents", // command name
-            "did"       : "{ID}",      // entity ID
-            "meta"      : {...},       // only for handshaking with new friend
-            "documents" : [...],       // when this is null, means to query
-            "last_time" : 123.45       // old document time for querying
-        }
-
-    """
-
-    DOCUMENTS = 'documents'
+    DOCUMENTS = 'documents'  # querying/updating entity documents
 
     #
     #   documents
@@ -140,7 +164,11 @@ class DocumentCommand(MetaCommand, ABC):
     @property
     @abstractmethod
     def documents(self) -> Optional[List[Document]]:
-        """ Get documents """
+        """Gets the list of entity documents (Visa/Bulletin) for this command.
+
+        - Non-null: Response with documents for the target `identifier`
+        - Null: Query request for documents of the target `identifier`
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.documents getter'
         )
@@ -148,20 +176,30 @@ class DocumentCommand(MetaCommand, ABC):
     @property
     @abstractmethod
     def last_time(self) -> Optional[DateTime]:
-        """ Last document time for querying """
+        """Gets the timestamp for incremental document queries.
+
+        Used to request only documents updated after this time (for efficient sync).
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.last_time getter'
         )
 
     #
-    #   Factory methods
+    #   Factories
     #
 
     @classmethod
     def query(cls, identifier: ID, last_time: DateTime = None):  # -> DocumentCommand:
-        """
-        1. Query Entity Document
-        2. Query Entity Document for updating with last time
+        """Creates a query document command to request entity documents.
+
+        Use this to:
+        1. Query all documents for an entity (omit `last_time`)
+        2. Query incremental updates (provide `last_time` for updates since then)
+
+        `identifier` is the target entity ID (user/group ID) to query.
+        `last_time` is the optional timestamp for incremental updates.
+
+        Returns a `DocumentCommand` instance for document query.
 
         :param identifier: entity ID
         :param last_time:  last document time
@@ -171,9 +209,17 @@ class DocumentCommand(MetaCommand, ABC):
 
     @classmethod
     def response(cls, documents: List[Document], meta: Optional[Meta] = None, identifier: ID = None):
-        """
-        1. Send Meta and Document to new friend
-        2. Response Entity Document
+        """Creates a response document command with entity documents.
+
+        Use this to:
+        1. Send metadata + documents to a new friend (handshake)
+        2. Respond to a document query request
+
+        `identifier` is the target entity ID (user/group ID).
+        `meta` is the optional metadata (for handshake scenarios).
+        `documents` is the list of documents to return for the entity.
+
+        Returns a `DocumentCommand` instance containing the documents.
 
         :param identifier: entity ID
         :param meta:       entity meta

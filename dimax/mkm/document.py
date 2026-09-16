@@ -51,10 +51,32 @@ from dimp import Document
 
 
 class BaseDocument(Dictionary, Document):
+    """Base document.
+
+    data format: {
+        "type"      : "visa",      // document type
+        "data"      : "{JsON data}",   // document data (optional)
+        "signature" : "{Base64 signature}",  // signature of data (optional)
+        ...         // other properties
+    }
+    """
 
     def __init__(self, document: StrMap = None,
                  doc_type: str = None,
                  data: Optional[str] = None, signature: Optional[TransportableData] = None):
+        """Create a document.
+
+        `document` is the raw document map, usually from network or storage.
+
+        1. If `data` and `signature` are both None, create a new
+           empty document with default properties.
+        2. Otherwise, create a document with `data` and `signature`
+           loaded from local storage.
+
+        `doc_type` is the document type.
+        `data` is the document data in JsON format (optional).
+        `signature` is the signature of `data` in Base64 format (optional).
+        """
         # check parameters
         if document is not None:
             # 0. document info from network
@@ -103,10 +125,9 @@ class BaseDocument(Dictionary, Document):
 
     @property  # private
     def data(self) -> Optional[str]:
-        """
-        Get serialized properties
+        """Get serialized properties.
 
-        :return: JsON string
+        Returns the JsON string of document data, or None if absent.
         """
         if self.__json is None:
             self.__json = self.get_str(key='data')
@@ -114,10 +135,9 @@ class BaseDocument(Dictionary, Document):
 
     @property  # private
     def signature(self) -> Optional[bytes]:
-        """
-        Get signature for serialized properties
+        """Get signature for serialized properties.
 
-        :return: signature data
+        Returns the signature data, or None if absent.
         """
         ted = self.__sig
         if ted is None:

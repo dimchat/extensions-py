@@ -63,6 +63,11 @@ except TypeError:
 
 class MessageGeneralFactory(MessageHandler, ContentHelper, EnvelopeHelper,
                             InstantMessageHelper, SecureMessageHelper, ReliableMessageHelper):
+    """General message helper.
+
+    Creates/parses content, envelope, instant/secure/reliable
+    messages with the registered factories.
+    """
 
     def __init__(self):
         super().__init__()

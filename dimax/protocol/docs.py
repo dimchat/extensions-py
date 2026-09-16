@@ -38,18 +38,17 @@ from dimp import Document
 
 
 class Visa(Document, ABC):
-    """
-        User Document
-        ~~~~~~~~~~~~~
-        This interface is defined for authorizing other apps to login,
-        which can generate a temporary asymmetric key pair for messaging.
+    """User Visa document interface (user-specific authorization document).
+
+    Defines a user's public-facing information and authorization keys, used for:
+    - Generating temporary asymmetric keys for secure messaging
+    - Authorizing third-party apps to log in
     """
 
     @property
     @abstractmethod
     def name(self) -> Optional[str]:
-        """
-        Get nickname
+        """Gets the user's display name/nickname.
 
         :return: user name
         """
@@ -60,8 +59,10 @@ class Visa(Document, ABC):
     @name.setter
     @abstractmethod
     def name(self, nickname: str):
-        """
-        Set nickname
+        """Sets the user's display name/nickname.
+
+        `nickname` is the new display name for the user.
+        Set the user nickname.
 
         :param nickname: user name
         :return:
@@ -73,8 +74,9 @@ class Visa(Document, ABC):
     @property
     @abstractmethod
     def public_key(self) -> Optional[EncryptKey]:
-        """
-        Get public key to encrypt message for user
+        """Gets the user's public encryption key.
+
+        This key is used by other users to encrypt messages sent to this user.
 
         :return: public key
         """
@@ -85,8 +87,11 @@ class Visa(Document, ABC):
     @public_key.setter
     @abstractmethod
     def public_key(self, key: EncryptKey):
-        """
-        Set public key for other user to encrypt message
+        """Sets the user's public encryption key.
+
+        `key` is the new public key for message encryption.
+
+        Set the public key for encryption.
 
         :param key: public key as visa.key
         """
@@ -97,8 +102,9 @@ class Visa(Document, ABC):
     @property
     @abstractmethod
     def avatar(self) -> Optional[TransportableFile]:
-        """
-        Get avatar URL
+        """Gets the user's avatar image (URL/Base64).
+
+        Returns a `TransportableFile` containing the avatar's URL or Base64 data.
 
         :return: PNF(URL)
         """
@@ -109,8 +115,11 @@ class Visa(Document, ABC):
     @avatar.setter
     @abstractmethod
     def avatar(self, url: TransportableFile):
-        """
-        Set avatar URL
+        """Sets the user's avatar image (URL/Base64).
+
+        `url` is the new avatar image (URL/Base64).
+
+        Set the avatar image.
 
         :param url: PNF(URL)
         """
@@ -120,16 +129,15 @@ class Visa(Document, ABC):
 
 
 class Bulletin(Document, ABC):
-    """
-        Group Document
-        ~~~~~~~~~~~~~~
+    """Group Bulletin document interface (group-specific announcement document).
+
+    Defines a group's public-facing information and core attributes.
     """
 
     @property
     @abstractmethod
     def name(self) -> Optional[str]:
-        """
-        Get title
+        """Gets the group's display name/title.
 
         :return: group name
         """
@@ -140,8 +148,11 @@ class Bulletin(Document, ABC):
     @name.setter
     @abstractmethod
     def name(self, title: str):
-        """
-        Set title
+        """Sets the group's display name/title.
+
+        `title` is the new title for the group.
+
+        Set the group name.
 
         :param title: group name
         :return:
@@ -153,8 +164,9 @@ class Bulletin(Document, ABC):
     @property
     @abstractmethod
     def founder(self) -> Optional[ID]:
-        """
-        Get group founder
+        """Gets the group founder's user ID.
+
+        Identifies the original creator of the group.
 
         :return: user ID
         """

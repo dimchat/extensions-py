@@ -49,7 +49,7 @@ from dimp import shared_message_extensions
 
 
 class GeneralEnvelopeFactory(EnvelopeFactory):
-    """ Envelope Factory """
+    """Envelope factory."""
 
     # Override
     def create_envelope(self, sender: ID, receiver: ID, time: Optional[DateTime]) -> Envelope:
@@ -66,18 +66,18 @@ class GeneralEnvelopeFactory(EnvelopeFactory):
 
 
 class GeneralInstantMessageFactory(InstantMessageFactory):
-    """ InstantMessage Factory """
+    """InstantMessage factory."""
 
     def __init__(self):
+        """Initialize the factory with a random starting serial number."""
         super().__init__()
-        # Initialize the factory with a random starting serial number.
         self.__sn = random.randint(0, 0x7fffffff)  # 0 ~ 0x7fffffff
         self.__lock = threading.Lock()
 
     def __next(self) -> int:
-        """ Get the next serial number.
+        """Get the next serial number.
 
-            Returns 1 ~ 2^31-1.
+        Returns 1 ~ 2^31-1.
         """
         sn = self.__sn
         assert sn >= 0, f'serial number error: {sn}'
@@ -113,7 +113,7 @@ class GeneralInstantMessageFactory(InstantMessageFactory):
 
 
 class GeneralSecureMessageFactory(SecureMessageFactory):
-    """ SecureMessage Factory """
+    """SecureMessage factory."""
 
     # Override
     def create_secure_message(self, i_msg: InstantMessage, data: bytes,
@@ -156,7 +156,7 @@ class GeneralSecureMessageFactory(SecureMessageFactory):
 
 
 class GeneralReliableMessageFactory(ReliableMessageFactory):
-    """ ReliableMessage Factory """
+    """ReliableMessage factory."""
 
     # Override
     def create_reliable_message(self, s_msg: SecureMessage, signature: bytes):

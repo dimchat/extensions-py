@@ -28,6 +28,12 @@
 # SOFTWARE.
 # ==============================================================================
 
+"""
+    DIM-AX
+    ~~~~~~
+
+    Decentralized Instant Messaging Application eXtensions
+"""
 
 from .account import AccountGeneralFactory
 from .message import MessageGeneralFactory

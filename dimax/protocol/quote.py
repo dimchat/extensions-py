@@ -41,29 +41,35 @@ from .base import BaseContent
 
 
 class QuoteContent(Content, ABC):
-    """
-        Quote Message content
-        ~~~~~~~~~~~~~~~~~~~~~
+    """Quote reply message content interface.
 
-        data format: {
-            "type" : i2s(0x37),
-            "sn"   : 67890,
+    Used to create "quote reply" messages that reference a previous message
+    (the "original" message) with additional text commentary.
 
-            "text"    : "...",  // text message
-            "origin"  : {       // original message envelope
-                "sender"   : "...",
-                "receiver" : "...",
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0x37),
+      "sn"   : 67890,
 
-                "type"     : i2s(0x01),
-                "sn"       : 12345,
-            }
-        }
+      "text"   : "...",  // Reply text content
+      "origin" : {       // Metadata of the original message being quoted
+        "sender"   : "...",      // Sender ID of the original message
+        "receiver" : "...",      // Receiver ID (or group ID) of the original message
+        "type"     : i2s(0x01),  // Content type of the original message
+        "sn"       : 12345       // Serial number of the original message
+      }
+    }
+    ```
     """
 
     @property
     @abstractmethod
     def text(self) -> str:
-        """ Get text """
+        """Gets the reply text content of the quote message.
+
+        This is the user's new commentary/response to the original quoted message.
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.text getter'
         )
@@ -71,7 +77,10 @@ class QuoteContent(Content, ABC):
     @property
     @abstractmethod
     def original_envelope(self) -> Optional[Envelope]:
-        """ Get original envelope """
+        """Gets the envelope of the original message being quoted.
+
+        Contains sender/receiver/time metadata of the message being replied to.
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.original_envelope getter'
         )
@@ -79,7 +88,10 @@ class QuoteContent(Content, ABC):
     @property
     @abstractmethod
     def original_sn(self) -> Optional[int]:
-        """ Get original SN """
+        """Gets the serial number (SN) of the original message being quoted.
+
+        Unique identifier of the original message, used to locate it in conversation history.
+        """
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.original_sn getter'
         )
@@ -90,8 +102,16 @@ class QuoteContent(Content, ABC):
 
     @classmethod
     def create(cls, text: str, envelope: Envelope, content: Content):
-        """
-        Create quote content with text & original message info
+        """Creates a `QuoteContent` instance with reply text and original message metadata.
+
+        Automatically purifies the original message's envelope/content using `QuoteHelper`
+        to generate the "origin" field in the quote message.
+
+        `text` is the user's reply text to the original message.
+        `envelope` is the envelope of the original message being quoted.
+        `content` is the content of the original message being quoted.
+
+        Returns a new `QuoteContent` instance.
 
         :param text:     message text
         :param envelope: original message head

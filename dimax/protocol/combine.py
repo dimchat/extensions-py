@@ -41,23 +41,26 @@ from .base import BaseContent
 
 
 class CombineContent(Content, ABC):
-    """
-        Combine Forward message
-        ~~~~~~~~~~~~~~~~~~~~~~~
+    """Combined forward content for chat history forwarding.
 
-        data format: {
-            "type" : i2s(0xCF),
-            "sn"   : 67890,
+    Special message format designed to forward a set of chat records as a single message.
 
-            "title"    : "...",  // chat title
-            "messages" : [...]   // chat history
-        }
+    JSON format:
+    ```json
+    {
+      "type" : i2s(0xCF),
+      "sn"   : 67890,
+
+      "title"    : "...",  // Chat history title
+      "messages" : [...]   // List of chat records to forward
+    }
+    ```
     """
 
     @property
     @abstractmethod
     def title(self) -> str:
-        """ Get chat title """
+        """Title for the forwarded chat history set."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.title getter'
         )
@@ -65,7 +68,7 @@ class CombineContent(Content, ABC):
     @property
     @abstractmethod
     def messages(self) -> List[InstantMessage]:
-        """ Get chat history """
+        """List of chat records (instant messages) to be forwarded."""
         raise NotImplementedError(
             f'Not implemented: {type(self).__module__}.{type(self).__name__}.messages getter'
         )

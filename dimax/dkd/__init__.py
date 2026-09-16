@@ -28,6 +28,13 @@
 # SOFTWARE.
 # ==============================================================================
 
+"""
+    Dao-Ke-Dao
+    ~~~~~~~~~~
+
+    Universal Message Module
+"""
+
 from ..protocol.base import BaseContent, BaseCommand
 
 from ..protocol.contents import BaseTextContent, WebPageContent, NameCardContent

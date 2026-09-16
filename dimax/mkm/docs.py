@@ -46,6 +46,7 @@ from .document import BaseDocument
 
 
 class BaseVisa(BaseDocument, Visa):
+    """Base document for User."""
 
     def __init__(self, document: Optional[StrMap] = None,
                  data: Optional[str] = None, signature: Optional[TransportableData] = None):
@@ -70,15 +71,13 @@ class BaseVisa(BaseDocument, Visa):
     def name(self, nickname: str):
         self.set_property(name='name', value=nickname)
 
-    """
-        Public Key for encryption
-        ~~~~~~~~~~~~~~~~~~~~~~~~~
-        For safety considerations, the visa.key which used to encrypt message data
-        should be different with meta.key
-    """
-
     @property  # Override
     def public_key(self) -> Optional[EncryptKey]:
+        """Public key for encryption.
+
+        For safety considerations, the visa.key which used to encrypt message data
+        should be different with meta.key.
+        """
         visa_key = self.__key
         if visa_key is None:
             info = self.get_property(name='key')
@@ -97,13 +96,9 @@ class BaseVisa(BaseDocument, Visa):
         self.set_property(name='key', value=info)
         self.__key = key
 
-    """
-        Avatar
-        ~~~~~~
-    """
-
     @property  # Override
     def avatar(self) -> Optional[TransportableFile]:
+        """Avatar URL."""
         img = self.__avatar
         if img is None:
             url = self.get_property(name='avatar')
@@ -123,6 +118,7 @@ class BaseVisa(BaseDocument, Visa):
 
 
 class BaseBulletin(BaseDocument, Bulletin):
+    """Base document for Group."""
 
     def __init__(self, document: Optional[StrMap] = None,
                  data: Optional[str] = None, signature: Optional[TransportableData] = None):

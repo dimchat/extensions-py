@@ -29,10 +29,10 @@
 # ==============================================================================
 
 """
-    DIM-AX - Message Contents & Commands
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    DIMP
+    ~~~~
 
-    Application extends for DIM protocol
+    Decentralized Instant Messaging Protocol
 """
 
 from .version import MetaType, DocumentType
