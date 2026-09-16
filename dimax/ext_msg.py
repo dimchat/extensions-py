@@ -40,6 +40,7 @@ from .dkd import ListContent, SecretContent
 
 from .protocol import ReceiptCommand
 from .protocol import MetaCommand, DocumentCommand
+from .protocol import GroupCommand
 
 from .dkd import BaseMoneyContent, TransferMoneyContent
 from .dkd import BaseFileContent, ImageFileContent, AudioFileContent, VideoFileContent
@@ -49,13 +50,13 @@ from .dkd import BaseQuoteContent
 
 from .dkd import BaseReceiptCommand
 from .dkd import BaseMetaCommand, BaseDocumentCommand
-from .dkd import GroupCommand, InviteGroupCommand
+from .dkd import InviteGroupCommand
 from .dkd import ExpelGroupCommand, JoinGroupCommand
 from .dkd import QuitGroupCommand, ResetGroupCommand
 
-from .dkd import GeneralCommandFactory
-from .dkd import HistoryCommandFactory
-from .dkd import GroupCommandFactory
+from .msg import GeneralCommandFactory
+from .msg import HistoryCommandFactory
+from .msg import GroupCommandFactory
 
 from .msg import GeneralEnvelopeFactory
 from .msg import GeneralInstantMessageFactory

@@ -28,16 +28,28 @@
 # SOFTWARE.
 # ==============================================================================
 
-from .envelope import GeneralEnvelopeFactory
-from .instant import GeneralInstantMessageFactory
-from .secure import GeneralSecureMessageFactory
-from .reliable import GeneralReliableMessageFactory
+from .cmd_facts import GeneralCommandFactory
+from .cmd_facts import HistoryCommandFactory
+from .cmd_facts import GroupCommandFactory
+
+from .msg_facts import GeneralEnvelopeFactory
+from .msg_facts import GeneralInstantMessageFactory
+from .msg_facts import GeneralSecureMessageFactory
+from .msg_facts import GeneralReliableMessageFactory
 
 
 __all__ = [
 
     #
-    #   Message Factory
+    #   Command Factories
+    #
+
+    'GeneralCommandFactory',
+    'HistoryCommandFactory',
+    'GroupCommandFactory',
+
+    #
+    #   Message Factories
     #
 
     'GeneralEnvelopeFactory',

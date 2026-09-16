@@ -49,10 +49,6 @@ from ..protocol.groups import BaseHistoryCommand, BaseGroupCommand
 from ..protocol.groups import InviteGroupCommand, ExpelGroupCommand
 from ..protocol.groups import JoinGroupCommand, QuitGroupCommand, ResetGroupCommand
 
-from .cmd_fact import GeneralCommandFactory
-from .cmd_fact import HistoryCommandFactory
-from .cmd_fact import GroupCommandFactory
-
 
 __all__ = [
 
@@ -80,13 +76,5 @@ __all__ = [
     'BaseHistoryCommand', 'BaseGroupCommand',
     'InviteGroupCommand', 'ExpelGroupCommand',
     'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
-
-    #
-    #   Command Factories
-    #
-
-    'GeneralCommandFactory',
-    'HistoryCommandFactory',
-    'GroupCommandFactory',
 
 ]
