@@ -134,7 +134,10 @@ __all__ = [
     'HistoryCommandFactory',
     'GroupCommandFactory',
 
-    'MessageFactory',
+    'GeneralEnvelopeFactory',
+    'GeneralInstantMessageFactory',
+    'GeneralSecureMessageFactory',
+    'GeneralReliableMessageFactory',
 
     #
     #   Core Extensions

@@ -28,21 +28,27 @@
 # SOFTWARE.
 # ==============================================================================
 
-from .envelope import GeneralEnvelopeFactory
-from .instant import GeneralInstantMessageFactory
-from .secure import GeneralSecureMessageFactory
-from .reliable import GeneralReliableMessageFactory
+from typing import Optional
+
+from dimp import StrMap
+from dimp import DateTime
+from dimp import ID
+from dimp import Envelope, EnvelopeFactory
+from dimp import MessageEnvelope
 
 
-__all__ = [
+class GeneralEnvelopeFactory(EnvelopeFactory):
+    """ Envelope Factory """
 
-    #
-    #   Message Factory
-    #
+    # Override
+    def create_envelope(self, sender: ID, receiver: ID, time: Optional[DateTime]) -> Envelope:
+        return MessageEnvelope(sender=sender, receiver=receiver, time=time)
 
-    'GeneralEnvelopeFactory',
-    'GeneralInstantMessageFactory',
-    'GeneralSecureMessageFactory',
-    'GeneralReliableMessageFactory',
-
-]
+    # Override
+    def parse_envelope(self, envelope: StrMap) -> Optional[Envelope]:
+        # check 'sender'
+        if 'sender' not in envelope:
+            # env.sender should not empty
+            return None
+        # OK
+        return MessageEnvelope(envelope=envelope)

@@ -57,7 +57,10 @@ from .dkd import GeneralCommandFactory
 from .dkd import HistoryCommandFactory
 from .dkd import GroupCommandFactory
 
-from .msg import MessageFactory
+from .msg import GeneralEnvelopeFactory
+from .msg import GeneralInstantMessageFactory
+from .msg import GeneralSecureMessageFactory
+from .msg import GeneralReliableMessageFactory
 
 
 # noinspection PyMethodMayBeStatic
@@ -67,13 +70,12 @@ class MessageFactoryMixIn:
     # protected
     def register_message_factories(self):
         """ Message factories """
-        factory = MessageFactory()
         # Envelope factory
-        Envelope.set_factory(factory=factory)
+        Envelope.set_factory(factory=GeneralEnvelopeFactory())
         # Message factories
-        InstantMessage.set_factory(factory=factory)
-        SecureMessage.set_factory(factory=factory)
-        ReliableMessage.set_factory(factory=factory)
+        InstantMessage.set_factory(factory=GeneralInstantMessageFactory())
+        SecureMessage.set_factory(factory=GeneralSecureMessageFactory())
+        ReliableMessage.set_factory(factory=GeneralReliableMessageFactory())
 
     # protected
     def register_content_factories(self):

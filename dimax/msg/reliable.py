@@ -28,21 +28,39 @@
 # SOFTWARE.
 # ==============================================================================
 
-from .envelope import GeneralEnvelopeFactory
-from .instant import GeneralInstantMessageFactory
-from .secure import GeneralSecureMessageFactory
-from .reliable import GeneralReliableMessageFactory
+from typing import Optional
+
+from dimp import StrMap
+from dimp import SecureMessage, ReliableMessage, ReliableMessageFactory
+from dimp import TransportableData
+from dimp import NetworkMessage
 
 
-__all__ = [
+class GeneralReliableMessageFactory(ReliableMessageFactory):
+    """ ReliableMessage Factory """
 
-    #
-    #   Message Factory
-    #
+    # Override
+    def create_reliable_message(self, s_msg: SecureMessage, signature: bytes):
+        #
+        #  1. encode signature
+        #
+        base64 = TransportableData.create(data=signature)
+        assert not base64.is_empty, f'failed to encode signature: {len(signature)} byte(s)' \
+                                    f' {s_msg.sender} => {s_msg.receiver}, {s_msg.group}'
+        #
+        #  2. create message
+        #
+        info = s_msg.to_map()
+        info['signature'] = base64.serialize()
+        return NetworkMessage(msg=info)
 
-    'GeneralEnvelopeFactory',
-    'GeneralInstantMessageFactory',
-    'GeneralSecureMessageFactory',
-    'GeneralReliableMessageFactory',
-
-]
+    # Override
+    def parse_reliable_message(self, msg: StrMap) -> Optional[ReliableMessage]:
+        # check 'sender', 'data', 'signature'
+        if 'sender' not in msg or 'data' not in msg or 'signature' not in msg:
+            # msg.sender should not be empty
+            # msg.data should not be empty
+            # msg.signature should not be empty
+            return None
+        # OK
+        return NetworkMessage(msg=msg)
