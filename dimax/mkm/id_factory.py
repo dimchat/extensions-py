@@ -33,19 +33,12 @@ from typing import Optional
 from dimp import Address
 from dimp import ID, IDFactory
 from dimp import Identifier
-from dimp import Meta
 
 from ..mem.ext import id_cache
 
 
 class GeneralIdentifierFactory(IDFactory):
     """ General ID Factory """
-
-    # Override
-    def generate_id(self, meta: Meta, network: int, terminal: Optional[str]) -> ID:
-        address = Address.generate(meta=meta, network=network)
-        assert address is not None, f'failed to generate ID with meta: {meta}'
-        return ID.create(address=address, name=meta.seed, terminal=terminal)
 
     # Override
     def create_id(self, name: Optional[str], address: Address, terminal: Optional[str]) -> ID:

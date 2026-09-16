@@ -65,13 +65,6 @@ from .meta import BaseMeta
 
 class DefaultMeta(BaseMeta):
 
-    def __init__(self, meta: StrMap = None,
-                 version: str = None, public_key: VerifyKey = None,
-                 seed: Optional[str] = None, fingerprint: Optional[TransportableData] = None):
-        super().__init__(meta=meta, version=version, public_key=public_key, seed=seed, fingerprint=fingerprint)
-        # caches
-        self.__addresses = {}  # int -> Address
-
     @property  # Override
     def has_seed(self) -> bool:
         return True
@@ -80,15 +73,10 @@ class DefaultMeta(BaseMeta):
     def generate_address(self, network: int = None) -> Address:
         # assert self.type == 'MKM' or self.type == '1', f'meta version error: {self.type}'
         assert network is not None, 'address type should not be empty'
-        # check caches
-        cached = self.__addresses.get(network)
-        if cached is None:
-            # generate and cache it
-            ted = self.fingerprint
-            data = ted.to_bytes()
-            cached = BTCAddress.from_data(data, network=network)
-            self.__addresses[network] = cached
-        return cached
+        # generate BTC address with fingerprint
+        ted = self.fingerprint
+        data = ted.to_bytes()
+        return BTCAddress.from_data(data, network=network)
 
 
 """
@@ -108,13 +96,6 @@ class DefaultMeta(BaseMeta):
 
 class BTCMeta(BaseMeta):
 
-    def __init__(self, meta: StrMap = None,
-                 version: str = None, public_key: VerifyKey = None,
-                 seed: Optional[str] = None, fingerprint: Optional[TransportableData] = None):
-        super().__init__(meta=meta, version=version, public_key=public_key, seed=seed, fingerprint=fingerprint)
-        # caches
-        self.__addresses = {}  # int -> Address
-
     @property  # Override
     def has_seed(self) -> bool:
         return False
@@ -123,17 +104,11 @@ class BTCMeta(BaseMeta):
     def generate_address(self, network: int = None) -> Address:
         # assert self.type == 'BTC' or self.type == '2', f'meta version error: {self.type}'
         assert network is not None, 'address type should not be empty'
-        # check caches
-        cached = self.__addresses.get(network)
-        if cached is None:
-            # TODO: compress public key?
-            key = self.public_key
-            ted = key.data
-            data = ted.to_bytes()
-            # generate and cache it
-            cached = BTCAddress.from_data(data, network=network)
-            self.__addresses[network] = cached
-        return cached
+        # generate BTC address with public key data
+        key = self.public_key
+        ted = key.data
+        data = ted.to_bytes()
+        return BTCAddress.from_data(data, network=network)
 
 
 """
@@ -152,13 +127,6 @@ class BTCMeta(BaseMeta):
 
 class ETHMeta(BaseMeta):
 
-    def __init__(self, meta: StrMap = None,
-                 version: str = None, public_key: VerifyKey = None,
-                 seed: Optional[str] = None, fingerprint: Optional[TransportableData] = None):
-        super().__init__(meta=meta, version=version, public_key=public_key, seed=seed, fingerprint=fingerprint)
-        # caches
-        self.__address: Optional[Address] = None
-
     @property  # Override
     def has_seed(self) -> bool:
         return False
@@ -166,18 +134,11 @@ class ETHMeta(BaseMeta):
     # Override
     def generate_address(self, network: int = None) -> Address:
         # assert self.type == 'ETH' or self.type == '4', f'meta version error: {self.type}'
-        assert network == EntityType.USER, f'ETH address type error: {network}'
-        # check cache
-        cached = self.__address
-        if cached is None:  # or cached.type != network:
-            # 64 bytes key data without prefix 0x04
-            key = self.public_key
-            ted = key.data
-            data = ted.to_bytes()
-            # generate and cache it
-            cached = ETHAddress.from_data(data)
-            self.__address = cached
-        return cached
+        # generate ETH address with public key data
+        key = self.public_key
+        ted = key.data
+        data = ted.to_bytes()
+        return ETHAddress.from_data(data)
 
 
 class BaseMetaFactory(MetaFactory):

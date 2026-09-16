@@ -120,12 +120,6 @@ class AccountGeneralFactory(AccountHandler,
         return self.__address_factory
 
     # Override
-    def generate_address(self, meta: Meta, network: int = None) -> Address:
-        factory = self.get_address_factory()
-        assert factory is not None, 'address factory not set'
-        return factory.generate_address(meta, network)
-
-    # Override
     def parse_address(self, address: Any) -> Optional[Address]:
         if address is None:
             return None
@@ -150,12 +144,6 @@ class AccountGeneralFactory(AccountHandler,
     # Override
     def get_id_factory(self) -> Optional[IDFactory]:
         return self.__id_factory
-
-    # Override
-    def generate_id(self, meta: Meta, network: Optional[int], terminal: Optional[str]) -> ID:
-        factory = self.get_id_factory()
-        assert factory is not None, 'ID factory not set'
-        return factory.generate_id(meta, network, terminal=terminal)
 
     # Override
     def create_id(self, name: Optional[str], address: Address, terminal: Optional[str]) -> ID:

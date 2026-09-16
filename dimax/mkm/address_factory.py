@@ -33,7 +33,6 @@ from typing import Optional
 
 from dimp import Address, AddressFactory
 from dimp import ANYWHERE, EVERYWHERE
-from dimp import Meta
 
 from ..mem.ext import address_cache
 
@@ -46,13 +45,6 @@ class BaseAddressFactory(AddressFactory, ABC):
         Base Address Factory
         ~~~~~~~~~~~~~~~~~~~~
     """
-
-    # Override
-    def generate_address(self, meta: Meta, network: int = None) -> Address:
-        address = meta.generate_address(network=network)
-        cache = address_cache()
-        cache.put(key=str(address), value=address)
-        return address
 
     # Override
     def parse_address(self, address: str) -> Optional[Address]:
