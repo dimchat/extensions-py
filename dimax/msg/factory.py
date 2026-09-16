@@ -30,15 +30,18 @@
 
 import random
 import threading
-from typing import Optional
+from typing import Optional, Dict
 
 from dimp import StrMap
 from dimp import DateTime
 from dimp import ID
+from dimp import EncryptedBundle
 from dimp import Content, Envelope
 from dimp import InstantMessage, SecureMessage, ReliableMessage
 from dimp import EnvelopeFactory, InstantMessageFactory, SecureMessageFactory, ReliableMessageFactory
+from dimp import PlainData, TransportableData
 from dimp import MessageEnvelope, PlainMessage, EncryptedMessage, NetworkMessage
+from dimp import shared_message_extensions
 
 
 class MessageFactory(EnvelopeFactory, InstantMessageFactory, SecureMessageFactory, ReliableMessageFactory):
@@ -108,6 +111,32 @@ class MessageFactory(EnvelopeFactory, InstantMessageFactory, SecureMessageFactor
     #
 
     # Override
+    def create_secure_message(self, i_msg: InstantMessage, data: bytes,
+                              bundles: Optional[Dict[ID, EncryptedBundle]]):
+        helper = shared_message_extensions.handler
+        if helper.is_broadcast(i_msg):
+            encoded_data = PlainData.create_with_bytes(data)  # UTF8.decode(data)
+        else:
+            encoded_data = TransportableData.create(data=data)
+        assert not encoded_data.is_empty, f'failed to encode content data: {len(data)} byte(s)'
+        msg_keys = None
+        if bundles is not None:
+            msg_keys = {}
+            assert not helper.is_broadcast(i_msg), f'broadcast message should not contains keys: {i_msg}'
+            for receiver, bundle in bundles.items():
+                encoded_keys = bundle.encode(receiver)
+                if len(encoded_keys) == 0:
+                    # assert False, f'failed to encode key data: {receiver}'
+                    continue
+                msg_keys.update(encoded_keys)
+        info = i_msg.to_map()
+        info.pop('content', None)
+        info['data'] = encoded_data.serialize()
+        if msg_keys is not None and len(msg_keys) > 0:
+            info['keys'] = msg_keys
+        return EncryptedMessage(msg=info)
+
+    # Override
     def parse_secure_message(self, msg: StrMap) -> Optional[SecureMessage]:
         # check 'sender', 'data'
         if 'sender' not in msg or 'data' not in msg:
@@ -123,6 +152,21 @@ class MessageFactory(EnvelopeFactory, InstantMessageFactory, SecureMessageFactor
     #
     #   ReliableMessageFactory
     #
+
+    # Override
+    def create_reliable_message(self, s_msg: SecureMessage, signature: bytes):
+        #
+        #  1. encode signature
+        #
+        base64 = TransportableData.create(data=signature)
+        assert not base64.is_empty, f'failed to encode signature: {len(signature)} byte(s)' \
+                                    f' {s_msg.sender} => {s_msg.receiver}, {s_msg.group}'
+        #
+        #  2. create message
+        #
+        info = s_msg.to_map()
+        info['signature'] = base64.serialize()
+        return NetworkMessage(msg=info)
 
     # Override
     def parse_reliable_message(self, msg: StrMap) -> Optional[ReliableMessage]:

@@ -35,7 +35,7 @@ from dimp import TransportableData
 from dimp import UTF8
 from dimp import VerifyKey, SignKey, PrivateKey
 
-from dimp import EntityType, Address
+from dimp import Address
 from dimp import Meta, MetaFactory
 
 from dimp import AccountHandler, GeneralAccountExtension

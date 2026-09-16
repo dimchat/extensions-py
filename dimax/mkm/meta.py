@@ -232,7 +232,7 @@ class BaseMeta(Dictionary, Meta, ABC):
         did = self.__caches.get(network)
         if did is None:
             address = self.generate_address(network=network)
-            assert address is not None and len(address) > 0,                 f'failed to generate ID: {network}, {self.to_map()}'
+            assert address is not None and len(address) > 0, f'failed to generate ID: {network}, {self.to_map()}'
             did = ID.create(name=self.seed, address=address)
             self.__caches[network] = did
         return did

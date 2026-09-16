@@ -39,8 +39,6 @@ from dimp import MessageHandlerExtension, shared_message_extensions
 
 from dimp import CommandExtension
 
-
-
 from .ext import AccountGeneralFactory
 from .ext import MessageGeneralFactory, CommandGeneralFactory
 
@@ -80,6 +78,7 @@ class CoreMixIn:
         ext.cmd_helper = helper
         ext.command_helper = helper
 
+
 def account_extensions() -> Union[AddressExtension, IDExtension, MetaExtension, DocumentExtension,
                                   GeneralAccountExtension]:
     return shared_account_extensions
@@ -93,6 +92,3 @@ def message_extensions() -> Union[MessageExtensions, ContentExtension,
 
 def command_extensions() -> CommandExtension:
     return shared_message_extensions
-
-
-

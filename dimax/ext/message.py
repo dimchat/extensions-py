@@ -28,17 +28,19 @@
 # SOFTWARE.
 # ==============================================================================
 
-from typing import Optional, Any
+from typing import Optional, Any, Dict
 
 from dimp import StrMap
 from dimp import DateTime, Converter, Wrapper
 from dimp import ID
+from dimp import EncryptedBundle
 from dimp import Content, ContentFactory
 from dimp import Envelope, EnvelopeFactory
 from dimp import InstantMessage, InstantMessageFactory
 from dimp import SecureMessage, SecureMessageFactory
 from dimp import ReliableMessage, ReliableMessageFactory
 
+from dimp import Message
 from dimp import MessageHandler
 from dimp import ContentHelper
 from dimp import EnvelopeHelper
@@ -77,6 +79,17 @@ class MessageGeneralFactory(MessageHandler, ContentHelper, EnvelopeHelper,
     def get_content_type(self, content: StrMap, default: Optional[str] = None) -> Optional[str]:
         value = content.get('type')
         return Converter.get_str(value=value, default=default)
+
+    # Override
+    def is_broadcast(self, message: Message) -> bool:
+        if message.receiver.is_broadcast:
+            return True
+        # check exposed group
+        overt_group = message.get('group')
+        if overt_group is None:
+            return False
+        group = ID.parse(identifier=overt_group)
+        return group is not None and group.is_broadcast
 
     #
     #   Content
@@ -208,6 +221,13 @@ class MessageGeneralFactory(MessageHandler, ContentHelper, EnvelopeHelper,
         assert factory is not None, 'secure message factory not ready'
         return factory.parse_secure_message(msg=info)
 
+    # Override
+    def create_secure_message(self, i_msg: InstantMessage, data: bytes,
+                              bundles: Optional[Dict[ID, EncryptedBundle]]):
+        factory = self.get_secure_message_factory()
+        assert factory is not None, 'secure message factory not ready'
+        return factory.create_secure_message(i_msg=i_msg, data=data, bundles=bundles)
+
     #
     #   ReliableMessage
     #
@@ -233,3 +253,9 @@ class MessageGeneralFactory(MessageHandler, ContentHelper, EnvelopeHelper,
         factory = self.get_reliable_message_factory()
         assert factory is not None, 'reliable message factory not ready'
         return factory.parse_reliable_message(msg=info)
+
+    # Override
+    def create_reliable_message(self, s_msg: SecureMessage, signature: bytes):
+        factory = self.get_reliable_message_factory()
+        assert factory is not None, 'reliable message factory not ready'
+        return factory.create_reliable_message(s_msg=s_msg, signature=signature)

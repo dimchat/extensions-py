@@ -66,4 +66,3 @@ class ExtensionLoader(CoreMixIn, EntityMixIn, MessageFactoryMixIn):
 
         self.register_content_factories()
         self.register_command_factories()
-
