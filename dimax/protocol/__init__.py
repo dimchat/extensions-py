@@ -39,35 +39,37 @@ from .version import MetaType, DocumentType
 
 from .docs import Visa, Bulletin
 
-from .forward import ForwardContent
-from .array import ArrayContent
+# from .base import BaseContent, BaseCommand
 
-from .assets import MoneyContent, TransferContent
-# from .assets import BaseMoneyContent, TransferMoneyContent
+from .contents import TextContent, PageContent, NameCard
+# from .contents import BaseTextContent, WebPageContent, NameCardContent
 
 from .files import FileContent, ImageContent, AudioContent, VideoContent
 # from .files import BaseFileContent, ImageFileContent, AudioFileContent, VideoFileContent
 
-from .contents import TextContent
-from .contents import PageContent, NameCard
-# from .contents import BaseTextContent, WebPageContent, NameCardContent
-
-from .combine import CombineContent
-# from .combine import CombineForwardContent
-
 from .quote import QuoteContent
 # from .quote import BaseQuoteContent
 
-from .receipt import ReceiptCommand
-# from .receipt import BaseReceiptCommand
+from .assets import MoneyContent, TransferContent
+# from .assets import BaseMoneyContent, TransferMoneyContent
+
+from .array import ArrayContent
+# from .array import ListContent
+from .combine import CombineContent
+# from .combine import CombineForwardContent
+from .forward import ForwardContent
+# from .forward import SecretContent
 
 from .commands import MetaCommand, DocumentCommand
 # from .commands import BaseMetaCommand, BaseDocumentCommand
+from .receipt import ReceiptCommand
+# from .receipt import BaseReceiptCommand
 
 from .groups import HistoryCommand, GroupCommand
-from .groups import InviteCommand, ExpelCommand, JoinCommand, QuitCommand, ResetCommand
 # from .groups import BaseHistoryCommand, BaseGroupCommand
-# from .groups import InviteGroupCommand, ExpelGroupCommand, JoinGroupCommand, QuitGroupCommand, ResetGroupCommand
+from .groups import InviteCommand, ExpelCommand, JoinCommand, QuitCommand, ResetCommand
+# from .groups import InviteGroupCommand, ExpelGroupCommand
+# from .groups import JoinGroupCommand, QuitGroupCommand, ResetGroupCommand
 
 
 __all__ = [
@@ -79,43 +81,44 @@ __all__ = [
     'MetaType', 'DocumentType',
     'Visa', 'Bulletin',
 
-    'ForwardContent', 'ArrayContent',
 
     #
-    #  Content Extends
+    #   Content Extends
     #
 
-    'MoneyContent', 'TransferContent',
-    'FileContent', 'ImageContent', 'AudioContent', 'VideoContent',
+    # 'BaseContent', 'BaseCommand',
+
     'TextContent', 'PageContent', 'NameCard',
-    'CombineContent',
-    'QuoteContent',
-
-    #
-    #  Command Extends
-    #
-
-    'ReceiptCommand',
-    'MetaCommand', 'DocumentCommand',
-    'HistoryCommand', 'GroupCommand',
-    'InviteCommand', 'ExpelCommand', 'JoinCommand', 'QuitCommand', 'ResetCommand',
-
-
-    ################################
-    #
-    #   Implementations
-    #
-    ################################
-
-    # 'BaseMoneyContent', 'TransferMoneyContent',
-    # 'BaseFileContent', 'ImageFileContent', 'AudioFileContent', 'VideoFileContent',
     # 'BaseTextContent', 'WebPageContent', 'NameCardContent',
-    # 'CombineForwardContent',
+
+    'FileContent', 'ImageContent', 'AudioContent', 'VideoContent',
+    # 'BaseFileContent', 'ImageFileContent', 'AudioFileContent', 'VideoFileContent',
+
+    'QuoteContent',
     # 'BaseQuoteContent',
 
-    # 'BaseReceiptCommand',
+    'MoneyContent', 'TransferContent',
+    # 'BaseMoneyContent', 'TransferMoneyContent',
+
+    'ArrayContent',
+    # 'ListContent',
+    'CombineContent',
+    # 'CombineForwardContent',
+    'ForwardContent',
+    # 'SecretContent',
+
+    #
+    #   Command Extends
+    #
+
+    'MetaCommand', 'DocumentCommand',
     # 'BaseMetaCommand', 'BaseDocumentCommand',
+    'ReceiptCommand',
+    # 'BaseReceiptCommand',
+
+    'HistoryCommand', 'GroupCommand',
     # 'BaseHistoryCommand', 'BaseGroupCommand',
+    'InviteCommand', 'ExpelCommand', 'JoinCommand', 'QuitCommand', 'ResetCommand',
     # 'InviteGroupCommand', 'ExpelGroupCommand',
     # 'JoinGroupCommand', 'QuitGroupCommand', 'ResetGroupCommand',
 

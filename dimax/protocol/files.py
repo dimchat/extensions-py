@@ -248,6 +248,22 @@ class AudioContent(FileContent, ABC):
 
     @property
     @abstractmethod
+    def duration(self) -> float:
+        """ Duration of the audio in seconds (null if unknown) """
+        raise NotImplementedError(
+            f'Not implemented: {type(self).__module__}.{type(self).__name__}.duration getter'
+        )
+
+    @duration.setter
+    @abstractmethod
+    def duration(self, value: float):
+        """ Set audio duration """
+        raise NotImplementedError(
+            f'Not implemented: {type(self).__module__}.{type(self).__name__}.duration setter'
+        )
+
+    @property
+    @abstractmethod
     def text(self) -> Optional[str]:
         """ Get text (Automatic Speech Recognition) """
         raise NotImplementedError(
@@ -440,6 +456,14 @@ class AudioFileContent(BaseFileContent, AudioContent):
                  url: Optional[URI] = None, password: Optional[DecryptKey] = None):
         msg_type = ContentType.AUDIO if content is None else None
         super().__init__(content, msg_type, data=data, filename=filename, url=url, password=password)
+
+    @property  # Override
+    def duration(self) -> float:
+        return self.get_float(key='duration', default=0)
+
+    @duration.setter  # Override
+    def duration(self, value: float):
+        self['duration'] = value
 
     @property  # Override
     def text(self) -> Optional[str]:

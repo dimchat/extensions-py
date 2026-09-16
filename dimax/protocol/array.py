@@ -30,7 +30,11 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+from dimp import StrMap, MutableStrMap
 from dimp import Content
+from dimp import ContentType
+
+from .base import BaseContent
 
 
 class ArrayContent(Content, ABC):
@@ -59,5 +63,51 @@ class ArrayContent(Content, ABC):
     #
     @classmethod
     def create(cls, contents: List[Content]):
-        from ..dkd.array import ListContent
         return ListContent(contents=contents)
+
+
+###############################
+#                             #
+#   DaoKeDao Implementation   #
+#                             #
+###############################
+
+
+class ListContent(BaseContent, ArrayContent):
+
+    def __init__(self, content: StrMap = None, contents: List[Content] = None):
+        if content is None:
+            # 1. new content with a list
+            assert contents is not None, 'content list should no be None'
+            msg_type = ContentType.ARRAY
+            super().__init__(None, msg_type)
+            # if contents is not None:
+            #     self['contents'] = Content.revert(contents=contents)
+        else:
+            # 2. content info from network
+            assert contents is None, f'params error: {content}, {contents}'
+            super().__init__(content)
+        # lazy
+        self.__list = contents
+
+    # Override
+    def to_map(self) -> MutableStrMap:
+        # serialize message contents
+        contents = self.__list
+        if contents is not None and self.get('contents') is None:
+            self['contents'] = Content.revert(contents=contents)
+        # OK
+        return super().to_map()
+
+    @property  # Override
+    def contents(self) -> List[Content]:
+        array = self.__list
+        if array is None:
+            info = self.get('contents')
+            if isinstance(info, list):
+                array = Content.convert(array=info)
+            else:
+                array = []
+            self.__list = array
+        # OK
+        return array

@@ -154,28 +154,63 @@ class GroupCommand(HistoryCommand, ABC):
 
 # noinspection PyAbstractClass
 class InviteCommand(GroupCommand, ABC):
-    pass
+
+    @property
+    @abstractmethod
+    def welcome(self) -> str:
+        """ The welcome/joining text sent with the invitation. """
+        raise NotImplementedError(
+            f'Not implemented: {type(self).__module__}.{type(self).__name__}.welcome getter'
+        )
 
 
 # noinspection PyAbstractClass
 class ExpelCommand(GroupCommand, ABC):
     """ Deprecated (use 'reset' instead) """
-    pass
+
+    @property
+    @abstractmethod
+    def away(self) -> str:
+        """ The farewell/leaving text sent with the expulsion. """
+        raise NotImplementedError(
+            f'Not implemented: {type(self).__module__}.{type(self).__name__}.away getter'
+        )
 
 
 # noinspection PyAbstractClass
 class JoinCommand(GroupCommand, ABC):
-    pass
+
+    @property
+    @abstractmethod
+    def ask(self) -> str:
+        """ The question/application text of the user requesting to join. """
+        raise NotImplementedError(
+            f'Not implemented: {type(self).__module__}.{type(self).__name__}.ask getter'
+        )
 
 
 # noinspection PyAbstractClass
 class QuitCommand(GroupCommand, ABC):
-    pass
+
+    @property
+    @abstractmethod
+    def bye(self) -> str:
+        """ The farewell/leaving text of the member quitting the group. """
+        raise NotImplementedError(
+            f'Not implemented: {type(self).__module__}.{type(self).__name__}.bye getter'
+        )
 
 
 # noinspection PyAbstractClass
 class ResetCommand(GroupCommand, ABC):
-    pass
+
+    @property
+    @abstractmethod
+    def confirm(self) -> str:
+        """ The confirmation text sent with the reset command. """
+        raise NotImplementedError(
+            f'Not implemented: {type(self).__module__}.{type(self).__name__}.confirm getter'
+        )
 
 
 ###############################
@@ -234,6 +269,10 @@ class InviteGroupCommand(BaseGroupCommand, InviteCommand):
         cmd = GroupCommand.INVITE if content is None else None
         super().__init__(content, cmd=cmd, group=group, members=members)
 
+    @property  # Override
+    def welcome(self) -> str:
+        return self.get_str(key='text', default='')
+
 
 class ExpelGroupCommand(BaseGroupCommand, ExpelCommand):
     """ Deprecated, use 'reset' instead """
@@ -243,12 +282,20 @@ class ExpelGroupCommand(BaseGroupCommand, ExpelCommand):
         cmd = GroupCommand.EXPEL if content is None else None
         super().__init__(content, cmd=cmd, group=group, members=members)
 
+    @property  # Override
+    def away(self) -> str:
+        return self.get_str(key='text', default='')
+
 
 class JoinGroupCommand(BaseGroupCommand, JoinCommand):
 
     def __init__(self, content: StrMap = None, group: ID = None):
         cmd = GroupCommand.JOIN if content is None else None
         super().__init__(content, cmd=cmd, group=group)
+
+    @property  # Override
+    def ask(self) -> str:
+        return self.get_str(key='text', default='')
 
 
 class QuitGroupCommand(BaseGroupCommand, QuitCommand):
@@ -257,9 +304,17 @@ class QuitGroupCommand(BaseGroupCommand, QuitCommand):
         cmd = GroupCommand.QUIT if content is None else None
         super().__init__(content, cmd=cmd, group=group)
 
+    @property  # Override
+    def bye(self) -> str:
+        return self.get_str(key='text', default='')
+
 
 class ResetGroupCommand(BaseGroupCommand, ResetCommand):
 
     def __init__(self, content: StrMap = None, group: ID = None, members: List[ID] = None):
         cmd = GroupCommand.RESET if content is None else None
         super().__init__(content, cmd=cmd, group=group, members=members)
+
+    @property  # Override
+    def confirm(self) -> str:
+        return self.get_str(key='text', default='')

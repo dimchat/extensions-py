@@ -30,8 +30,12 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+from dimp import StrMap, MutableStrMap
 from dimp import Content
 from dimp import ReliableMessage
+from dimp import ContentType
+
+from .base import BaseContent
 
 
 class ForwardContent(Content, ABC):
@@ -61,5 +65,58 @@ class ForwardContent(Content, ABC):
     #
     @classmethod
     def create(cls, messages: List[ReliableMessage]):
-        from ..dkd.forward import SecretContent
         return SecretContent(messages=messages)
+
+
+###############################
+#                             #
+#   DaoKeDao Implementation   #
+#                             #
+###############################
+
+
+class SecretContent(BaseContent, ForwardContent):
+
+    def __init__(self, content: StrMap = None, messages: List[ReliableMessage] = None):
+        if content is None:
+            # 1. new content with message(s)
+            msg_type = ContentType.FORWARD
+            super().__init__(None, msg_type)
+            # if messages is not None:
+            #     self['secrets'] = ReliableMessage.revert(messages=messages)
+        else:
+            # 2. content info from network
+            assert messages is None, f'params error: {content}, {messages}'
+            super().__init__(content)
+        # lazy
+        self.__secrets = messages
+
+    # Override
+    def to_map(self) -> MutableStrMap:
+        # serialize top-secret messages
+        messages = self.__secrets
+        if messages is not None and self.get('secrets') is None:
+            self['secrets'] = ReliableMessage.revert(messages=messages)
+        # OK
+        return super().to_map()
+
+    @property  # Override
+    def secrets(self) -> List[ReliableMessage]:
+        messages = self.__secrets
+        if messages is None:
+            info = self.get('secrets')
+            if isinstance(info, list):
+                # get from 'secrets'
+                messages = ReliableMessage.convert(array=info)
+            else:
+                assert info is None, f'secret messages error: {info}'
+                # get from 'forward'
+                forward = self.get('forward')
+                msg = ReliableMessage.parse(msg=forward)
+                if msg is None:
+                    messages = []
+                else:
+                    messages = [msg]
+            self.__secrets = messages
+        # OK
+        return messages
