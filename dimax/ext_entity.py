@@ -30,9 +30,10 @@
 
 from dimp import Address, ID
 from dimp import Meta, MetaFactory
-from .protocol.version import MetaType
 from dimp import Document, DocumentFactory
-from .protocol.version import DocumentType
+
+from .protocol import MetaType
+from .protocol import DocumentType
 
 from .mkm import GeneralIdentifierFactory
 from .mkm import BaseAddressFactory

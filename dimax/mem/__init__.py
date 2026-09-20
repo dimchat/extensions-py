@@ -24,15 +24,21 @@
 # ==============================================================================
 
 from .cache import MemoryCache, ThanosCache
+# from .cache import thanos
 
 from .ext import MemoryCacheExtension
+# from .ext import address_cache, id_cache
+# from .ext import reduce_memory
 
 
 __all__ = [
 
     'MemoryCache',
     'ThanosCache',
+    # 'thanos',
 
     'MemoryCacheExtension',
+    # 'address_cache', 'id_cache',
+    # 'reduce_memory',
 
 ]

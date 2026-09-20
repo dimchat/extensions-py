@@ -34,14 +34,13 @@ from dimp import StrMap
 from dimp import Content, ContentFactory, ContentType
 from dimp import Command, CommandFactory
 from dimp import Envelope, InstantMessage, SecureMessage, ReliableMessage
-from .protocol.base import BaseContent
-
-from .dkd import ListContent, SecretContent
 
 from .protocol import ReceiptCommand
 from .protocol import MetaCommand, DocumentCommand
 from .protocol import GroupCommand
 
+from .dkd import BaseContent
+from .dkd import ListContent, SecretContent
 from .dkd import BaseMoneyContent, TransferMoneyContent
 from .dkd import BaseFileContent, ImageFileContent, AudioFileContent, VideoFileContent
 from .dkd import BaseTextContent, WebPageContent, NameCardContent

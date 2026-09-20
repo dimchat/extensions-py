@@ -35,17 +35,24 @@
     Decentralized Instant Messaging Application eXtensions
 """
 
-from .account import GeneralAccountHelper
-from .message import GeneralMessageHelper
-from .command import GeneralCommandHelper
-
 from ..mem.ext import MemoryCacheExtension
+# from ..mem.ext import thanos
 from ..mem.ext import address_cache
 from ..mem.ext import id_cache
 from ..mem.ext import reduce_memory
 
+from .account import GeneralAccountHelper
+from .message import GeneralMessageHelper
+from .command import GeneralCommandHelper
+
 
 __all__ = [
+
+    'MemoryCacheExtension',
+    # 'thanos',
+    'address_cache',
+    'id_cache',
+    'reduce_memory',
 
     #
     #   Core Extensions
@@ -54,14 +61,5 @@ __all__ = [
     'GeneralAccountHelper',
     'GeneralMessageHelper',
     'GeneralCommandHelper',
-
-    #
-    #   mem/ext
-    #
-
-    'MemoryCacheExtension',
-    'address_cache',
-    'id_cache',
-    'reduce_memory',
 
 ]
