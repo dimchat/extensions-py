@@ -26,15 +26,10 @@
 from typing import Union
 
 from dimp import ID, Address
-from dimp import AccountHandler
-from dimp import GeneralAccountExtension, shared_account_extensions
+from dimp import GeneralAccountExtension
+from dimp import shared_account_extensions
 
 from .cache import MemoryCache, ThanosCache
-
-
-def account_handler() -> AccountHandler:
-    ext = account_extensions()
-    return ext.handler
 
 
 # -----------------------------------------------------------------------------
@@ -78,17 +73,17 @@ shared_account_extensions.address_cache = ThanosCache()
 shared_account_extensions.id_cache = ThanosCache()
 
 
-def account_extensions() -> Union[MemoryCacheExtension, GeneralAccountExtension]:
+def _account_extension() -> Union[MemoryCacheExtension, GeneralAccountExtension]:
     return shared_account_extensions
 
 
 def address_cache() -> MemoryCache[str, Address]:
-    ext = account_extensions()
+    ext = _account_extension()
     return ext.address_cache
 
 
 def id_cache() -> MemoryCache[str, ID]:
-    ext = account_extensions()
+    ext = _account_extension()
     return ext.id_cache
 
 
@@ -98,7 +93,7 @@ def reduce_memory() -> int:
 
         Returns the number of survivors.
     """
-    ext = account_extensions()
+    ext = _account_extension()
     cnt1 = ext.address_cache.reduce_memory()
     cnt2 = ext.id_cache.reduce_memory()
     return cnt1 + cnt2

@@ -43,9 +43,7 @@ from dimp import Converter
 
 from dimp import Envelope, Content
 from dimp import Command
-
-from dimp import CommandHandler, GeneralCommandExtension
-from dimp import shared_message_extensions
+from dimp import command_handler
 
 from .base import BaseCommand
 
@@ -151,15 +149,6 @@ class ReceiptCommand(Command, ABC):
         if isinstance(content, ReceiptCommand):
             return content
         assert False, f'invalid receipt: {content}'
-
-
-def command_extensions() -> GeneralCommandExtension:
-    return shared_message_extensions
-
-
-def command_handler() -> CommandHandler:
-    ext = command_extensions()
-    return ext.command_handler
 
 
 ###############################

@@ -37,8 +37,7 @@ from dimp import ID
 from dimp import InstantMessage
 from dimp import ContentType
 from dimp import Content, Command
-from dimp import CommandHandler, GeneralCommandExtension
-from dimp import shared_message_extensions
+from dimp import message_handler, command_handler
 
 
 class BaseContent(Dictionary, Content):
@@ -71,7 +70,7 @@ class BaseContent(Dictionary, Content):
     def type(self) -> str:
         """ message content type: text, image, ... """
         if self.__type is None:
-            helper = shared_message_extensions.handler
+            helper = message_handler()
             self.__type = helper.get_content_type(content=super().to_map(), default='')
             # self.__type = self.get_int(key='type', default=0)
         return self.__type
@@ -119,12 +118,3 @@ class BaseCommand(BaseContent, Command, ABC):
         helper = command_handler()
         return helper.get_cmd(content=super().to_map(), default='')
         # return self.get_str(key='command', default='')
-
-
-def message_extensions() -> GeneralCommandExtension:
-    return shared_message_extensions
-
-
-def command_handler() -> CommandHandler:
-    ext = message_extensions()
-    return ext.command_handler

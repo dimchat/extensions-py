@@ -35,9 +35,14 @@
     Decentralized Instant Messaging Application eXtensions
 """
 
-from .account import AccountGeneralFactory
-from .message import MessageGeneralFactory
-from .command import CommandGeneralFactory
+from .account import GeneralAccountHelper
+from .message import GeneralMessageHelper
+from .command import GeneralCommandHelper
+
+from ..mem.ext import MemoryCacheExtension
+from ..mem.ext import address_cache
+from ..mem.ext import id_cache
+from ..mem.ext import reduce_memory
 
 
 __all__ = [
@@ -46,7 +51,17 @@ __all__ = [
     #   Core Extensions
     #
 
-    'AccountGeneralFactory',
-    'MessageGeneralFactory', 'CommandGeneralFactory',
+    'GeneralAccountHelper',
+    'GeneralMessageHelper',
+    'GeneralCommandHelper',
+
+    #
+    #   mem/ext
+    #
+
+    'MemoryCacheExtension',
+    'address_cache',
+    'id_cache',
+    'reduce_memory',
 
 ]

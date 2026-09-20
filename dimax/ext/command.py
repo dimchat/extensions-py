@@ -28,7 +28,7 @@
 # SOFTWARE.
 # ==============================================================================
 
-from typing import Optional, Union, Any
+from typing import Optional, Any
 
 from dimp import StrMap
 from dimp import Wrapper, Converter
@@ -37,7 +37,7 @@ from dimp import Envelope, Content
 from dimp import Command, CommandFactory
 from dimp import ContentFactory
 from dimp import CommandHelper, CommandHandler
-from dimp import ContentExtension, MessageHandlerExtension, shared_message_extensions
+from dimp import message_handler, content_helper
 
 from ..protocol.receipt import BaseReceiptCommand
 
@@ -54,7 +54,7 @@ except TypeError:
     CommandFactoryMap = typing.MutableMapping[str, CommandFactory]
 
 
-class CommandGeneralFactory(CommandHandler, CommandHelper):
+class GeneralCommandHelper(CommandHandler, CommandHelper):
     """General command helper.
 
     Creates/parses commands and manages command factories.
@@ -137,16 +137,10 @@ def default_factory(info: StrMap) -> Optional[CommandFactory]:
 
 
 def get_content_type(content: StrMap, default: Optional[str] = None) -> Optional[str]:
-    ext = message_extensions()
-    helper = ext.handler
+    helper = message_handler()
     return helper.get_content_type(content=content, default=default)
 
 
 def get_content_factory(msg_type: str) -> Optional[ContentFactory]:
-    ext = message_extensions()
-    helper = ext.content_helper
+    helper = content_helper()
     return helper.get_content_factory(msg_type)
-
-
-def message_extensions() -> Union[ContentExtension, MessageHandlerExtension]:
-    return shared_message_extensions

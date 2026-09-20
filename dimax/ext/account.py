@@ -61,9 +61,9 @@ except TypeError:
     DocumentFactoryMap = typing.MutableMapping[str, DocumentFactory]
 
 
-class AccountGeneralFactory(AccountHandler,
-                            AddressHelper, IDHelper,
-                            MetaHelper, DocumentHelper):
+class GeneralAccountHelper(AccountHandler,
+                           AddressHelper, IDHelper,
+                           MetaHelper, DocumentHelper):
     """General account helper.
 
     Creates/parses address, ID, meta and document with the

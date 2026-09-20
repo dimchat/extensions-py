@@ -28,14 +28,12 @@
 # SOFTWARE.
 # ==============================================================================
 
-from typing import Optional, Union
+from typing import Optional
 
 from dimp import StrMap
 from dimp import Content, ContentFactory
 from dimp import Command, CommandFactory
-
-from dimp import CommandHandler, GeneralCommandExtension
-from dimp import CommandExtension, shared_message_extensions
+from dimp import command_helper, command_handler
 
 from ..protocol.groups import BaseHistoryCommand, BaseGroupCommand
 from ..protocol.base import BaseCommand
@@ -120,21 +118,11 @@ class GroupCommandFactory(HistoryCommandFactory):
         return BaseGroupCommand(content=content)
 
 
-def message_extensions() -> Union[CommandExtension, GeneralCommandExtension]:
-    return shared_message_extensions
-
-
-def command_handler() -> CommandHandler:
-    ext = message_extensions()
-    return ext.command_handler
-
-
 def get_cmd(content: StrMap, default: Optional[str] = None) -> Optional[str]:
     helper = command_handler()
     return helper.get_cmd(content=content, default=default)
 
 
 def get_command_factory(cmd: str) -> Optional[CommandFactory]:
-    ext = message_extensions()
-    helper = ext.command_helper
+    helper = command_helper()
     return helper.get_command_factory(cmd=cmd)

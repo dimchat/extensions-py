@@ -38,9 +38,10 @@ from dimp import InstantMessageExtension, SecureMessageExtension, ReliableMessag
 from dimp import MessageHandlerExtension, shared_message_extensions
 
 from dimp import CommandExtension
+from dimp import GeneralCommandExtension
 
-from .ext import AccountGeneralFactory
-from .ext import MessageGeneralFactory, CommandGeneralFactory
+from .ext import GeneralAccountHelper
+from .ext import GeneralMessageHelper, GeneralCommandHelper
 
 
 # noinspection PyMethodMayBeStatic
@@ -60,13 +61,13 @@ class CoreMixIn:
         address/ID/meta/document parsing and generating.
         """
         # mkm
-        helper = AccountGeneralFactory()
-        ext = account_extensions()
+        helper = GeneralAccountHelper()
+        ext = _account_extension()
         ext.address_helper = helper
         ext.id_helper = helper
         ext.meta_helper = helper
         ext.doc_helper = helper
-        ext.helper = helper
+        ext.handler = helper
 
     # protected
     def register_message_helpers(self):
@@ -76,14 +77,14 @@ class CoreMixIn:
         content/envelope/instant/secure/reliable message operations.
         """
         # dkd
-        helper = MessageGeneralFactory()
-        ext = message_extensions()
+        helper = GeneralMessageHelper()
+        ext = _message_extension()
         ext.content_helper = helper
         ext.envelope_helper = helper
         ext.instant_helper = helper
         ext.secure_helper = helper
         ext.reliable_helper = helper
-        ext.helper = helper
+        ext.handler = helper
 
     # protected
     def register_command_helpers(self):
@@ -93,22 +94,22 @@ class CoreMixIn:
         command parsing and factory management.
         """
         # cmd
-        helper = CommandGeneralFactory()
-        ext = command_extensions()
-        ext.cmd_helper = helper
+        helper = GeneralCommandHelper()
+        ext = _command_extension()
         ext.command_helper = helper
+        ext.command_handler = helper
 
 
-def account_extensions() -> Union[AddressExtension, IDExtension, MetaExtension, DocumentExtension,
+def _account_extension() -> Union[AddressExtension, IDExtension, MetaExtension, DocumentExtension,
                                   GeneralAccountExtension]:
     return shared_account_extensions
 
 
-def message_extensions() -> Union[MessageExtensions, ContentExtension,
+def _message_extension() -> Union[MessageExtensions, ContentExtension,
                                   InstantMessageExtension, SecureMessageExtension, ReliableMessageExtension,
                                   MessageHandlerExtension]:
     return shared_message_extensions
 
 
-def command_extensions() -> CommandExtension:
+def _command_extension() -> Union[CommandExtension, GeneralCommandExtension]:
     return shared_message_extensions

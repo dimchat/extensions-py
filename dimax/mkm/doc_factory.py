@@ -34,9 +34,7 @@ from dimp import StrMap
 from dimp import TransportableData
 
 from dimp import Document, DocumentFactory
-
-from dimp import AccountHandler, GeneralAccountExtension
-from dimp import shared_account_extensions
+from dimp import account_handler
 
 from ..protocol import DocumentType
 
@@ -109,7 +107,7 @@ class GeneralDocumentFactory(DocumentFactory):
         # elif 'did' not in document:
         #     # document.did should not be empty
         #     return None
-        helper = doc_helper()
+        helper = account_handler()
         # create document for type
         doc_type = helper.get_document_type(document=document)
         if doc_type == DocumentType.VISA:
@@ -118,12 +116,3 @@ class GeneralDocumentFactory(DocumentFactory):
             return BaseBulletin(document=document)
         else:
             return BaseDocument(document=document)
-
-
-def account_extensions() -> GeneralAccountExtension:
-    return shared_account_extensions
-
-
-def doc_helper() -> AccountHandler:
-    ext = account_extensions()
-    return ext.handler

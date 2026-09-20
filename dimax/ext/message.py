@@ -61,8 +61,8 @@ except TypeError:
     ContentFactoryMap = typing.MutableMapping[str, ContentFactory]
 
 
-class MessageGeneralFactory(MessageHandler, ContentHelper, EnvelopeHelper,
-                            InstantMessageHelper, SecureMessageHelper, ReliableMessageHelper):
+class GeneralMessageHelper(MessageHandler, ContentHelper, EnvelopeHelper,
+                           InstantMessageHelper, SecureMessageHelper, ReliableMessageHelper):
     """General message helper.
 
     Creates/parses content, envelope, instant/secure/reliable

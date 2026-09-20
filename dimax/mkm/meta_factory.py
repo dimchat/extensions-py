@@ -37,9 +37,7 @@ from dimp import VerifyKey, SignKey, PrivateKey
 
 from dimp import Address
 from dimp import Meta, MetaFactory
-
-from dimp import AccountHandler, GeneralAccountExtension
-from dimp import shared_account_extensions
+from dimp import account_handler
 
 from ..protocol import MetaType
 
@@ -181,7 +179,7 @@ class BaseMetaFactory(MetaFactory):
                 assert False, f'meta error: {meta}'
         elif 'fingerprint' not in meta:
             assert False, f'meta error: {meta}'
-        helper = doc_helper()
+        helper = account_handler()
         version = helper.get_meta_type(meta=meta)
         if version == MetaType.MKM:
             out = DefaultMeta(meta=meta)
@@ -194,12 +192,3 @@ class BaseMetaFactory(MetaFactory):
         if out.is_valid:
             return out
         # assert False, f'meta error: {meta}'
-
-
-def account_extensions() -> GeneralAccountExtension:
-    return shared_account_extensions
-
-
-def doc_helper() -> AccountHandler:
-    ext = account_extensions()
-    return ext.handler

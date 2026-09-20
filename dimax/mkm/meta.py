@@ -39,8 +39,7 @@ from dimp import UTF8
 from dimp import VerifyKey, PublicKey
 from dimp import Meta
 from dimp import ID, Address
-from dimp import AccountHandler
-from dimp import GeneralAccountExtension, shared_account_extensions
+from dimp import account_handler
 
 
 class BaseMeta(Dictionary, Meta, ABC):
@@ -261,12 +260,3 @@ class BaseMeta(Dictionary, Meta, ABC):
             did = ID.create(name=self.seed, address=address)
             self.__caches[network] = did
         return did
-
-
-def account_extensions() -> GeneralAccountExtension:
-    return shared_account_extensions
-
-
-def account_handler() -> AccountHandler:
-    ext = account_extensions()
-    return ext.handler
